@@ -2,9 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="/home/luigi/Scrivania/w3c-dom.jar"/>
-	<classpathentry kind="lib" path="/home/luigi/Scrivania/jtidy-r872-jdk15.jar"/>
-	<classpathentry kind="lib" path="/home/luigi/Scrivania/jsoup-1.8.3.jar"/>
-	<classpathentry kind="lib" path="/home/luigi/Scrivania/javax.servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="/home/luigi/git/solid-memory/lib/javax.servlet.jsp-2.2.0.v201112011158-sources.jar"/>
+	<classpathentry kind="lib" path="/home/luigi/git/solid-memory/lib/javax.servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="/home/luigi/git/solid-memory/lib/jsoup-1.8.3.jar"/>
+	<classpathentry kind="lib" path="/home/luigi/git/solid-memory/lib/jtidy-r872-jdk15.jar"/>
+	<classpathentry kind="lib" path="/home/luigi/git/solid-memory/lib/w3c-dom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
