@@ -26,13 +26,13 @@ public class Count {
 	static boolean GENERATE=true;
 	static int failureConnect=0;
 	public static void main(String [] args) throws FileNotFoundException, IOException {
-		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/article.xml"));
-		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp.xml"));
-		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/article.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/mio_dblp.xml"));
+		BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/dblp.xml"));
 		String line = reader.readLine();
 
 		FileWriter w;
-		w=new FileWriter("/home/luigi/Scrivania/output.xml");
+		w=new FileWriter("~/Scrivania/output.xml");
 
 		ricopiaArticoli(reader,line,w);
 
