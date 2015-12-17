@@ -14,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import scraper.JDisplaScraper;
+import scraper.JkdbScraper;
 import scraper.StandardScraper;
 import scraper.SuperScraper;
 
@@ -26,17 +27,18 @@ public class Count {
 	static boolean GENERATE=true;
 	static int failureConnect=0;
 	public static void main(String [] args) throws FileNotFoundException, IOException {
-		//BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/article.xml"));
-		//BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/mio_dblp.xml"));
-		BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/article.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/dblp.xml"));
+		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jkdb_dblp.xml"));
 		String line = reader.readLine();
 
 		FileWriter w;
-		w=new FileWriter("~/Scrivania/output.xml");
+		w=new FileWriter("/home/luigi/Scrivania/output.xml");
 
-		ricopiaArticoli(reader,line,w);
-
-		//parsing(reader,line,w);
+		//ricopiaArticoli(reader,line,w);
+ 
+		parsing(reader,line,w);
 
 	}
 
@@ -54,9 +56,13 @@ public class Count {
 				if(line.contains("j.displa.")){
 					scraper = new JDisplaScraper();
 				}
-				else{
-					scraper = new StandardScraper();
-				}
+				else 
+					if(line.contains("jkdb")){
+						scraper = new JkdbScraper();
+					}
+					else{
+						scraper = new StandardScraper();
+					}
 				scraper.scrape(w, line);
 			}
 			if(GENERATE)
@@ -77,7 +83,7 @@ public class Count {
 
 		while(line!=null) {
 
-			if(line.contains("<ee>")&& line.contains("dx.doi.org") && (line.contains("j.displa.") || line.contains("jkdb") || line.contains("j.compind") || line.contains("IJIEM."))){
+			if(line.contains("<ee>")&& line.contains("dx.doi.org") && line.contains("jkdb")  /*(line.contains("j.displa.") || line.contains("jkdb") || line.contains("j.compind") || line.contains("IJIEM."))*/){
 				copia=true;
 				articolo+=line+"\n";
 			}

@@ -25,11 +25,11 @@ public class JDisplaScraper extends SuperScraper {
 			Document page=returnPage(URL2[0]);
 
 			Elements elemsAbstract = page.select("div.abstract");
-			Element elemA=elemsAbstract.get(0);
+			Element elem=elemsAbstract.get(0);
 			if(DEBUG)
-				System.out.println(elemA.text().toString());
+				System.out.println(elem.text().toString());
 			if(GENERATE)
-				w.write(elemA.text().toString());
+				w.write(elem.text().toString());
 
 			w.write("</abstract>\n");
 

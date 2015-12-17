@@ -9,8 +9,8 @@ import org.jsoup.nodes.Document;
 public abstract class SuperScraper {
 	
 	protected boolean GENERATE = true;
-	protected boolean DEBUG = true;
-	protected boolean DEBUGException = true;
+	protected boolean DEBUG = false;
+	protected boolean DEBUGException = false;
 	protected int failureConnect = 0;
 	
 	public static Document returnPage(String URL ) throws IOException{
