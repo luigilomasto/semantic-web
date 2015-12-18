@@ -31,10 +31,11 @@ public class Count {
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/article.xml"));
 	    //BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jdispla_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/dblp.xml"));
-		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jkdb_dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jkdb_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/j.combind_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/IJIEM_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp.xml"));
+		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp(2).xml"));
 		String line = reader.readLine();
 
 		FileWriter w;
@@ -92,7 +93,7 @@ public class Count {
 
 		while(line!=null) {
 
-			if(line.contains("<ee>")&& line.contains("dx.doi.org") && (line.contains("s00") || line.contains("BF")/* || line.contains("IJIEM.") || line.contains("j.displa.") || line.contains("jkdb") || line.contains("jdkb") || line.contains("j.compind")*/)){
+			if(line.contains("<ee>")&& line.contains("dx.doi.org") && (/*line.contains("s00") || line.contains("BF") ||*/ line.contains("IJIEM.") || line.contains("j.displa.") || line.contains("jkdb") || line.contains("jdkb") || line.contains("j.compind"))){
 				copia=true;
 				articolo+=line+"\n";
 			}
