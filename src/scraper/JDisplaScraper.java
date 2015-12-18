@@ -23,7 +23,7 @@ public class JDisplaScraper extends SuperScraper {
 		String URL2[]=URL[1].split("</ee>");
 		try{
 			Document page=returnPage(URL2[0]);
-			
+
 			Elements elemsAbstract = page.select("div.abstract > p");
 			if(elemsAbstract.size()>0){
 				Element elem=elemsAbstract.get(0);
@@ -34,6 +34,24 @@ public class JDisplaScraper extends SuperScraper {
 			}
 
 			w.write("</abstract>\n");
+
+			//Estrae le keyword
+			//Elements elemsKeyWord = page.select("ul.abstract-about-subject > li > a");
+
+
+			Elements elemsKeyWord = page.select("ul.keyword > li");
+			if(elemsKeyWord.size() > 0){
+				for(Element elem: elemsKeyWord){
+					if(DEBUG)
+						System.out.println(elem.text().toString());
+					if(GENERATE){
+						w.write("<keyword>");
+						String toWrite=elem.text().toString().replace(";", "");
+						w.write(toWrite);
+						w.write("</keyword>\n");}
+				}
+			}
+
 
 		} 
 		catch(ConnectException e){ failureConnect++;if(DEBUGException){System.out.print("Connessione rifiutata "+URL2[0]+" ");System.out.println(failureConnect);}}

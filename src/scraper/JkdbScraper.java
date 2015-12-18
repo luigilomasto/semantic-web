@@ -25,7 +25,7 @@ public class JkdbScraper extends SuperScraper {
 				Document page=returnPage(URL2[0]);
 
 				//*[@id="abstract"]/text()
-				
+				//*[@id="abstract"]/text()
 				//Estrae l'abstract
 				Elements elemsAbstract = page.select("div.contentareac");
 				
@@ -33,10 +33,14 @@ public class JkdbScraper extends SuperScraper {
 					
 					if(DEBUG)
 						System.out.println(elem.text().toString());
-					if(GENERATE)
-						w.write(elem.text().toString());
+					if(GENERATE){
+						if(elem.text().toString().contains("Article Preview"));
+						    String toWrite[]=elem.text().toString().split("Article Preview");
+						w.write(toWrite[0]);
+						w.write("</abstract>\n");
+						}
 				
-				w.write("</abstract>\n");
+				
 
 
 			} 
