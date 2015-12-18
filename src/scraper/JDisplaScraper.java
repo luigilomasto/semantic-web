@@ -23,8 +23,8 @@ public class JDisplaScraper extends SuperScraper {
 		String URL2[]=URL[1].split("</ee>");
 		try{
 			Document page=returnPage(URL2[0]);
-
-			Elements elemsAbstract = page.select("div.abstract");
+			
+			Elements elemsAbstract = page.select("div.abstract > p");
 			if(elemsAbstract.size()>0){
 				Element elem=elemsAbstract.get(0);
 				if(DEBUG)
