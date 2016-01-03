@@ -9,16 +9,16 @@ public class FactoryScraper {
 			if(line.contains("j.displa.") || line.contains("j.compind")){
 				toReturn = new JDisplaScraper();
 			}
-			else 
+			else{
 				if(line.contains("jkdb")){
 					toReturn = new JkdbScraper();
-				}else 
-					if(line.contains("IJIEM.")){
+				}else if(line.contains("IJIEM.")){
 						toReturn = new IJIEMScraper();
-					}
+				}
 				else{
 					toReturn = new StandardScraper();
 				}
+			}
 		}
 		return toReturn;
 	}
