@@ -3,20 +3,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import org.jsoup.HttpStatusException;
-import org.jsoup.Jsoup;
-import org.jsoup.UnsupportedMimeTypeException;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import scraper.IJIEMScraper;
-import scraper.JDisplaScraper;
-import scraper.JkdbScraper;
-import scraper.StandardScraper;
+import scraper.FactoryScraper;
 import scraper.SuperScraper;
 //*[@id="col1"]/div/table/tbody/tr/td/font/text()
 
@@ -51,26 +39,14 @@ public class Count {
 	private static void parsing(BufferedReader reader, String line, FileWriter w) throws IOException {
 		int nArticoli=0;
 		SuperScraper scraper;
+		FactoryScraper f = new FactoryScraper();
 
 		while(line!=null && nArticoli<=5000) {
 
 			// contiene l'URL dell'articolo la prendiamo e lo passiamo alla funzione che estrae abstract e parolechiave
-			if(line.contains("<title>"))
+			if(line.contains("<title>")){
 				++nArticoli;
-			if(line.contains("<ee>")){
-				if(line.contains("j.displa.") || line.contains("j.compind")){
-					scraper = new JDisplaScraper();
-				}
-				else 
-					if(line.contains("jkdb")){
-						scraper = new JkdbScraper();
-					}else 
-						if(line.contains("IJIEM.")){
-							scraper = new IJIEMScraper();
-						}
-					else{
-						scraper = new StandardScraper();
-					}
+				scraper = f.createScraper(line);
 				scraper.scrape(w, line);
 			}
 			if(GENERATE)
