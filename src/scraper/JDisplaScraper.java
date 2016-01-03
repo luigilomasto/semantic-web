@@ -24,14 +24,34 @@ public class JDisplaScraper extends SuperScraper {
 		try{
 			Document page=returnPage(URL2[0]);
 
-			Elements elemsAbstract = page.select("div.abstract");
-			Element elemA=elemsAbstract.get(0);
-			if(DEBUG)
-				System.out.println(elemA.text().toString());
-			if(GENERATE)
-				w.write(elemA.text().toString());
+			Elements elemsAbstract = page.select("div.abstract > p");
+			if(elemsAbstract.size()>0){
+				Element elem=elemsAbstract.get(0);
+				if(DEBUG)
+					System.out.println(elem.text().toString());
+				if(GENERATE)
+					w.write(elem.text().toString());
+			}
 
 			w.write("</abstract>\n");
+
+			//Estrae le keyword
+			//Elements elemsKeyWord = page.select("ul.abstract-about-subject > li > a");
+
+
+			Elements elemsKeyWord = page.select("ul.keyword > li");
+			if(elemsKeyWord.size() > 0){
+				for(Element elem: elemsKeyWord){
+					if(DEBUG)
+						System.out.println(elem.text().toString());
+					if(GENERATE){
+						w.write("<keyword>");
+						String toWrite=elem.text().toString().replace(";", "");
+						w.write(toWrite);
+						w.write("</keyword>\n");}
+				}
+			}
+
 
 		} 
 		catch(ConnectException e){ failureConnect++;if(DEBUGException){System.out.print("Connessione rifiutata "+URL2[0]+" ");System.out.println(failureConnect);}}

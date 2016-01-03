@@ -13,30 +13,37 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import scraper.IJIEMScraper;
 import scraper.JDisplaScraper;
+import scraper.JkdbScraper;
 import scraper.StandardScraper;
 import scraper.SuperScraper;
-
+//*[@id="col1"]/div/table/tbody/tr/td/font/text()
 
 
 public class Count {
-
+    static int count=0;
 	static boolean DEBUG=false;
 	static boolean DEBUGException=false;
 	static boolean GENERATE=true;
 	static int failureConnect=0;
 	public static void main(String [] args) throws FileNotFoundException, IOException {
-		//BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/article.xml"));
-		//BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/mio_dblp.xml"));
-		BufferedReader reader = new BufferedReader(new FileReader("~/Scrivania/dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/article.xml"));
+	    //BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jdispla_dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jkdb_dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/j.combind_dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/IJIEM_dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp.xml"));
+		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp(2).xml"));
 		String line = reader.readLine();
 
 		FileWriter w;
-		w=new FileWriter("~/Scrivania/output.xml");
+		w=new FileWriter("/home/luigi/Scrivania/output.xml");
 
-		ricopiaArticoli(reader,line,w);
-
-		//parsing(reader,line,w);
+		//ricopiaArticoli(reader,line,w);
+ 
+		parsing(reader,line,w);
 
 	}
 
@@ -51,12 +58,19 @@ public class Count {
 			if(line.contains("<title>"))
 				++nArticoli;
 			if(line.contains("<ee>")){
-				if(line.contains("j.displa.")){
+				if(line.contains("j.displa.") || line.contains("j.compind")){
 					scraper = new JDisplaScraper();
 				}
-				else{
-					scraper = new StandardScraper();
-				}
+				else 
+					if(line.contains("jkdb")){
+						scraper = new JkdbScraper();
+					}else 
+						if(line.contains("IJIEM.")){
+							scraper = new IJIEMScraper();
+						}
+					else{
+						scraper = new StandardScraper();
+					}
 				scraper.scrape(w, line);
 			}
 			if(GENERATE)
@@ -67,6 +81,8 @@ public class Count {
 
 
 		w.flush();
+		
+		System.out.println(nArticoli);
 
 	}
 
@@ -77,13 +93,14 @@ public class Count {
 
 		while(line!=null) {
 
-			if(line.contains("<ee>")&& line.contains("dx.doi.org") && (line.contains("j.displa.") || line.contains("jkdb") || line.contains("j.compind") || line.contains("IJIEM."))){
+			if(line.contains("<ee>")&& line.contains("dx.doi.org") && (/*line.contains("s00") || line.contains("BF") ||*/ line.contains("IJIEM.") || line.contains("j.displa.") || line.contains("jkdb") || line.contains("jdkb") || line.contains("j.compind"))){
 				copia=true;
 				articolo+=line+"\n";
 			}
 			else
 				if(line.contains("</article>") && !copia){
 					articolo="";
+					
 				}
 				else
 					if(line.contains("</article>") && copia){
