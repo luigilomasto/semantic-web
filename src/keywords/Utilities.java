@@ -66,14 +66,16 @@ public class Utilities {
 			String word = token.get(TextAnnotation.class);
 			Pair<Boolean, Boolean> stopword = token.get(StopwordAnnotator.class);  
 			if(!stopword.first){
-			    String stem = token.get(LemmaAnnotation.class);
-			    Keyword keyword = find(keywords, new Keyword(stem));
-			    // add its corresponding initial token
-			    keyword.add(stem);
-			    // this is the POS tag of the token
-			    String pos = token.get(PartOfSpeechAnnotation.class);
+				String pos = token.get(PartOfSpeechAnnotation.class);
+				if(pos.contains("NN")){
+				    //String ne = token.get(NamedEntityTagAnnotation.class);
+					//System.out.println(pos + " " + ne);
+				    String stem = token.get(LemmaAnnotation.class);
+				    Keyword keyword = find(keywords, new Keyword(stem));
+				    // add its corresponding initial token
+				    keyword.add(stem);	
+				}
 			    // this is the NER label of the token
-			    String ne = token.get(NamedEntityTagAnnotation.class);
 			}
 		  }
 		}	
