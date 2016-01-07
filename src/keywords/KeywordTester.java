@@ -2,7 +2,6 @@ package keywords;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
