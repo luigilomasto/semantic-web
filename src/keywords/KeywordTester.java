@@ -1,15 +1,52 @@
 package keywords;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import com.alchemyapi.api.AlchemyAPI;
 
 public class KeywordTester {
 
-	public static void main(String[] args) throws IOException {
-		String test = "C is a general-purpose, imperative computer programming language, supporting structured programming, lexical variable scope and recursion, while a static type system prevents many unintended operations. By design, C provides constructs that map efficiently to typical machine instructions, and therefore it has found lasting use in applications that had formerly been coded in assembly language, including operating systems, as well as various application software for computers ranging from supercomputers to embedded systems. C was originally developed by Dennis Ritchie between 1969 and 1973 at AT&T Bell Labs,[5] and used to re-implement the Unix operating system.[6] It has since become one of the most widely used programming languages of all time,[7][8] with C compilers from various vendors available for the majority of existing computer architectures and operating systems. C has been standardized by the American National Standards Institute (ANSI) since 1989 (see ANSI C) and subsequently by the International Organization for Standardization (ISO).";
+	public static void main(String[] args) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
+		if(args.length == 0){
+			return;
+		}
+		String test = args[0];
 		
-		List<Keyword> keywords = Utilities.guessFromString(test);
-		System.out.println(keywords);
+		AlchemyAPI alchemyObj = AlchemyAPI.GetInstanceFromFile("api_key.txt");
+
+        // Extract topic keywords for a text string.
+        Document doc = alchemyObj.TextGetRankedKeywords(test);
+        System.out.println(getStringFromDocument(doc));
 	}
+	
+	private static String getStringFromDocument(Document doc) {
+        try {
+            DOMSource domSource = new DOMSource(doc);
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.transform(domSource, result);
+
+            return writer.toString();
+        } catch (TransformerException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
 }
