@@ -1,0 +1,31 @@
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+
+
+/*Select topics and titles of documents for a given author*/
+SELECT  ?title ?topic
+WHERE {
+  
+  ?prod crm:P14_carried_out_by ?aut.
+  ?aut sd:name "John Darlington".
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?doc crm:P56_bears_feature ?topic
+  
+}
+
+/*select authors, titles nad topisc of the documents for a given year of publication*/
+
+SELECT  ?aut ?title ?topic
+WHERE {
+  
+  ?prod crm:P14_carried_out_by ?aut.
+  ?prod crm:P4_has_time-span sd:2011.
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?doc crm:P56_bears_feature ?topic
+
+ 
+  
+}
