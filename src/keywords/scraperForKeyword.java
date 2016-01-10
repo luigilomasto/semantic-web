@@ -24,6 +24,7 @@ public class scraperForKeyword {
 	private static BufferedReader reader;
 	private static int numeroRigheLette;
 	private static int nArticoli;
+	
 
 	//restituisce la stringa contenente le keyword con rilevanza >0.5
 	private static String getStringFromDocument(Document doc) throws IOException {
@@ -63,7 +64,7 @@ public class scraperForKeyword {
 
 	public static void main(String [] args) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException{
 		numeroRigheLette=0;
-		nArticoli = 899; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
+		nArticoli = 19; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
 		int articoliGialetti=nArticoli;
 		boolean abstractB=false;
 		reader = new BufferedReader(new FileReader("lib/datasetWithAbstract/dataset1.xml"));
@@ -75,7 +76,7 @@ public class scraperForKeyword {
 
 		FileWriter w;
 		// questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
-		w=new FileWriter("lib/datasetWithKeyWord/dataset1.xml"); //
+		w=new FileWriter("lib/datasetWithKeyWord/dataset2.xml"); //
 
 		int counter=0;
 
@@ -87,11 +88,11 @@ public class scraperForKeyword {
 
 
 
-		while(line!=null && nArticoli<900+articoliGialetti) {
+		while(line!=null && nArticoli<20+articoliGialetti) {
 
 			if(line.contains("<article")){
 				++nArticoli;
-				if(nArticoli<4+articoliGialetti){
+				if(nArticoli<20+articoliGialetti){
 					w.write(line+"\n");}
 				abstractB=false;
 			}
