@@ -138,6 +138,11 @@ public class ProvaJena {
 			if(line.startsWith(ARTICLE)){
 				count++;
 				Iterator<String> aut_it = row_authors.iterator();
+				Individual doc = model.createIndividual(NS +""+count,e_document);
+				Individual prod = model.createIndividual(NS+"Working at writing paper"+count,production);
+				Individual time = model.createIndividual(NS +row_time,time_span);
+				//Individual e_place = model.createIndividual(NS+"",place);
+				Individual e_title = model.createIndividual(NS+row_title,title);
 				
 				/*foreach author*/
 				while(aut_it.hasNext()){
@@ -145,12 +150,6 @@ public class ProvaJena {
 					String curr_aut = aut_it.next();
 					Individual aut = model.createIndividual(NS+curr_aut,author);
 					//Individual app = model.createIndividual(NS + curr_aut,appellation);
-					Individual prod = model.createIndividual(NS+"Working at writing paper"+count,production);
-					Individual doc = model.createIndividual(NS +""+count,e_document);
-					Individual time = model.createIndividual(NS +row_time,time_span);
-					//Individual e_place = model.createIndividual(NS+"",place);
-					Individual e_title = model.createIndividual(NS+row_title,title);
-					
 					/*Adding comment*/
 					aut.addComment("Instance of the "+count+" document","");
 					
