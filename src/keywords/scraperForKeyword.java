@@ -64,8 +64,9 @@ public class scraperForKeyword {
 
 	public static void main(String [] args) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException{
 		numeroRigheLette=0;
-		nArticoli = 19; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
-		int articoliGialetti=nArticoli;
+		nArticoli = 0; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
+		int articoliGialetti=nArticoli; //articoli già letti, viene usata come appoggio
+		int articoliDaLeggere=900; // numero di articoli da leggere
 		boolean abstractB=false;
 		reader = new BufferedReader(new FileReader("lib/datasetWithAbstract/dataset1.xml"));
 
@@ -76,7 +77,7 @@ public class scraperForKeyword {
 
 		FileWriter w;
 		// questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
-		w=new FileWriter("lib/datasetWithKeyWord/dataset2.xml"); //
+		w=new FileWriter("lib/datasetWithKeyWord/dataset1.xml"); //
 
 		int counter=0;
 
@@ -88,11 +89,11 @@ public class scraperForKeyword {
 
 
 
-		while(line!=null && nArticoli<20+articoliGialetti) {
+		while(line!=null && nArticoli<articoliDaLeggere+articoliGialetti) {
 
 			if(line.contains("<article")){
 				++nArticoli;
-				if(nArticoli<20+articoliGialetti){
+				if(nArticoli<articoliDaLeggere+articoliGialetti){
 					w.write(line+"\n");}
 				abstractB=false;
 			}
@@ -109,7 +110,7 @@ public class scraperForKeyword {
 					if(!abstract_Text.equals("")){
 
 						//Document s=KeywordExtractor.extractKeyword(abstract_Text, "lib/api_key.txt");
-						Document s=KeywordExtractor.extractKeyword(abstract_Text, "/home/luigi/git/solid-memory/lib/API_key/marco");
+						Document s=KeywordExtractor.extractKeyword(abstract_Text, "/home/luigi/git/solid-memory/lib/API_key/andrea");
 						String keywordDocument = getStringFromDocument(s);
 						w.write(keywordDocument);
 
