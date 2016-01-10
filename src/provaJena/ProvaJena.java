@@ -222,6 +222,7 @@ public class ProvaJena {
 		row_title ="";
 		row_time = "";
 		row_topics = new ArrayList<String>();
+		row_keywords = new ArrayList<String>();
 	}
 
 	/**Add a new individual in the owl file**/
