@@ -89,6 +89,7 @@ public class ProvaJena {
 		OntClass title = model.getOntClass(CRM_NS+"E35_Title");
 		//OntClass appellation = model.getOntClass("E41_Appellation");
 		OntClass topic = model.getOntClass(NS+"Topic");
+		OntClass keyword = model.getOntClass(NS+"Keyword");
 		
 		/*Select properties*/
 		OntProperty carried = model.getOntProperty(CRM_NS+"P14_carried_out_by");
@@ -99,7 +100,8 @@ public class ProvaJena {
 		OntProperty hasTitle = model.getOntProperty(CRM_NS+"P102_has_title");
 		//OntProperty isIdentifiedBy = model.getOntProperty(CRM_NS+"P1_is_identified_by");
 		OntProperty name = model.getOntProperty(NS+"name");
-		OntProperty bears_features =model.getOntProperty(CRM_NS+"P56_bears_feature");
+		OntProperty bears_features = model.getOntProperty(CRM_NS+"P56_bears_feature");
+		OntProperty is_identified_by = model.getOntProperty(CRM_NS+"P149_is_identified_by");
 		
 		/*XML parser
 		SAXBuilder builder = new SAXBuilder();
@@ -162,9 +164,9 @@ public class ProvaJena {
 					doc.addProperty(hasTitle, e_title);
 						
 					/*foreach topic*/
-					Iterator<String> topic_int = row_topics.iterator();
-					while(topic_int.hasNext()){
-						String curr_topic = topic_int.next();
+					Iterator<String> topic_it = row_topics.iterator();
+					while(topic_it.hasNext()){
+						String curr_topic = topic_it.next();
 						Individual top = model.createIndividual(NS+curr_topic,topic);
 						doc.addProperty(bears_features, top);
 					}
@@ -176,7 +178,8 @@ public class ProvaJena {
 				
 				while(keyword_it.hasNext()){
 					String curr_keyword = keyword_it.next();
-					//TODO add to model here
+					Individual key = model.createIndividual(NS+curr_keyword,keyword);
+					doc.addProperty(is_identified_by, key);
 				}
 				
 				
@@ -222,6 +225,7 @@ public class ProvaJena {
 		row_title ="";
 		row_time = "";
 		row_topics = new ArrayList<String>();
+		row_keywords = new ArrayList<String>();
 	}
 
 	/**Add a new individual in the owl file**/
