@@ -1,6 +1,7 @@
 package keywords;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,27 +24,47 @@ public class scraperForKeyword {
 	private static BufferedReader reader;
 	private static int numeroRigheLette;
 	private static int nArticoli;
-	
-	private static String getStringFromDocument(Document doc) {
-        try {
-            DOMSource domSource = new DOMSource(doc);
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
 
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
-            transformer.transform(domSource, result);
+	//restituisce la stringa contenente le keyword con rilevanza >0.5
+	private static String getStringFromDocument(Document doc) throws IOException {
+		try {
+			DOMSource domSource = new DOMSource(doc);
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			String toReturn="";
+			TransformerFactory tf = TransformerFactory.newInstance();
+			Transformer transformer = tf.newTransformer();
+			transformer.transform(domSource, result);
 
-           return writer.toString();
-        } catch (TransformerException ex) {
-            ex.printStackTrace();
-            return null;
-    }
-    }
+			String [] split=writer.toString().split("<keyword>");
+
+			for(int i=1;i<split.length;i++){
+
+				//estraggo text e relevance
+				String []relevance1=split[i].split("<relevance>");
+				String []relevance2=relevance1[1].split("</relevance>");
+				String []text1=split[i].split("<text>");
+				String []text2=text1[1].split("</text>");
+
+				double relevance = Double.parseDouble(relevance2[0]);
+				//prendo le keyword con relevance > 0.3
+				if(relevance*10 >= 5){
+					toReturn+="<keyword>\n<relevance>"+relevance+"</relevance>\n";
+					toReturn+="<text>"+text2[0]+"</text>\n</keyword>\n";	
+				}
+			}
+
+			return toReturn;
+		} catch (TransformerException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
 
 	public static void main(String [] args) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException{
 		numeroRigheLette=0;
-		nArticoli = 0;
+		nArticoli = 899; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
+		int articoliGialetti=nArticoli;
 		boolean abstractB=false;
 		reader = new BufferedReader(new FileReader("lib/datasetWithAbstract/dataset1.xml"));
 
@@ -53,39 +74,50 @@ public class scraperForKeyword {
 
 
 		FileWriter w;
-		w=new FileWriter("lib/datasetWithKeyWord/dataset1.xml");
+		// questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
+		w=new FileWriter("lib/datasetWithKeyWord/dataset1.xml"); //
+
+		int counter=0;
+
+		while(counter<=nArticoli){
+			line = reader.readLine();
+			if(line.contains("<article"))
+				++counter;
+		}
 
 
-		while(line!=null) {
-			++numeroRigheLette;
+
+		while(line!=null && nArticoli<900+articoliGialetti) {
 
 			if(line.contains("<article")){
 				++nArticoli;
-				w.write(line+"\n");
+				if(nArticoli<4+articoliGialetti){
+					w.write(line+"\n");}
 				abstractB=false;
 			}
-			else
+			else// se inizia l'abstract setto il booleano a true
 				if(line.contains("<abstract>")){
 					abstract_Text+=line;
 					abstractB=true;
 
-				}
+				}//se l'abstract finisce incontro <ee> <topic> <keyword>
 				else if(abstractB && (line.contains("<ee>"))|| line.contains("<topic>")|| line.contains("<keyword>")){
 					abstractB=false;
 					abstract_Text=abstract_Text.replace("<abstract>","");
 					abstract_Text=abstract_Text.replace("</abstract>","");
 					if(!abstract_Text.equals("")){
-						//System.out.println(abstract_Text);
-						Document s=KeywordExtractor.extractKeyword(abstract_Text, "lib/api_key.txt");
-						String keyworddocument = getStringFromDocument(s);
-						System.out.println(keyworddocument);
+
+						//Document s=KeywordExtractor.extractKeyword(abstract_Text, "lib/api_key.txt");
+						Document s=KeywordExtractor.extractKeyword(abstract_Text, "/home/luigi/git/solid-memory/lib/API_key/marco");
+						String keywordDocument = getStringFromDocument(s);
+						w.write(keywordDocument);
+
 					}
 
 					abstract_Text="";
 					w.write(line+"\n");
-				}
+				}//se sto nell'abstract
 				else if(abstractB){
-					//abstract_Text.concat(line);
 					abstract_Text+=line;
 				}
 
@@ -95,7 +127,7 @@ public class scraperForKeyword {
 			line = reader.readLine();
 		}
 		w.close();
-		System.out.println(nArticoli);
+		System.out.println("#Articoli letti: "+ --nArticoli);
 
 	}
 
