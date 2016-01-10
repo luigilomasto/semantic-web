@@ -37,7 +37,7 @@ public class ProvaJena {
 	/*CRM namespace*/
 	private final static String CRM_NS = "http://www.cidoc-crm.org/cidoc-crm/";
 	/*Dataset path*/
-	private final static String DATA_PATH = "dataset/";
+	private final static String DATA_PATH = "lib/datasetWithKeyWord";
 
 	/*Control string*/
 	private final static String ARTICLE = "</article>";
@@ -45,7 +45,7 @@ public class ProvaJena {
 	private final static String TITLE = "<title>";
 	private final static String YEAR = "<year>";
 	//private final static String URL = "<url>";
-	//private final static String ABSTRACT = "<abstract>";
+	private final static String KEYWORD = "<keyword>";
 	private final static String TOPIC = "<topic>";
 
 	/*Information variables*/
@@ -55,7 +55,7 @@ public class ProvaJena {
 	private static ArrayList<String> row_topics = new ArrayList<String>();
 	/*Global model*/
 	private static OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
-	static Model g;
+	protected static Model g;
 	
 	
 	public static void main(String[] args) throws IOException, UnsupportedEncodingException {
@@ -80,7 +80,7 @@ public class ProvaJena {
 		}
 		
 		/*Select classes*/
-		OntClass author = model.getOntClass( NS + "Author" );
+		OntClass author = model.getOntClass(NS+"Author");
 		OntClass production = model.getOntClass(CRM_NS+"E12_Production");
 		OntClass e_document = model.getOntClass(CRM_NS+"E31_Document");
 		//OntClass place = model.getOntClass(CRM_NS+"E53_Place");
@@ -90,8 +90,8 @@ public class ProvaJena {
 		OntClass topic = model.getOntClass(NS+"Topic");
 		
 		/*Select properties*/
-		OntProperty carried = model.getOntProperty(CRM_NS+ "P14_carried_out_by" );
-		OntProperty hasProduced = model.getOntProperty(CRM_NS + "P108_has_produced");
+		OntProperty carried = model.getOntProperty(CRM_NS+"P14_carried_out_by");
+		OntProperty hasProduced = model.getOntProperty(CRM_NS+"P108_has_produced");
 		//OntProperty refersTo = model.getOntProperty(CRM_NS+"P67_refers_to");
 		OntProperty has_time_span = model.getOntProperty(CRM_NS+"P4_has_time-span");
 		//OntProperty took_place_at = model.getOntProperty(CRM_NS+"P7_took_place_at");
@@ -131,7 +131,7 @@ public class ProvaJena {
 			if(Key.PRINT_DOC)
 				System.out.println(line);
 		
-			/*New aticle has to be added to the owl file*/
+			/*New article has to be added to the owl file*/
 			if(line.startsWith(ARTICLE)){
 				count++;
 				Iterator<String> aut_it = row_authors.iterator();
@@ -196,7 +196,7 @@ public class ProvaJena {
 			Iterator<Individual> allIndividuals;
 			allIndividuals=model.listIndividuals();
 			while(allIndividuals.hasNext()){
-				String curr = URLDecoder.decode(allIndividuals.next().toString(),"utf-8");
+				String curr = URLDecoder.decode(allIndividuals.next().toString(), "utf-8");
 				System.out.println(curr);
 			}
 		}
@@ -215,7 +215,7 @@ public class ProvaJena {
 	private static void addIndividual(OntModel moddel, FileWriter out) {
 		if(Key.PRINT_ON_FILE){
 			try{
-				model.write(out,"RDF/XML");
+				model.write(out, "RDF/XML");
 		
 			}
 			catch(BadURIException e){
@@ -244,11 +244,11 @@ public class ProvaJena {
 		/*Mapping between the resource uri and the physical path within the disk*/
 		FileManager.get().getLocationMapper().addAltEntry(SOURCE_URI, SOURCE_PATH);
 		/*Load external model*/
-		Model myOntology = FileManager.get().loadModel( SOURCE_URI ); 
+		Model myOntology = FileManager.get().loadModel(SOURCE_URI); 
 		/*Append as submodel on the global model*/
 		model.addSubModel(myOntology);
 		/*Set the prefix for the related Namespace*/
-		model.setNsPrefix("sd", NS );
+		model.setNsPrefix("sd", NS);
 		model.setNsPrefix("owl", OWL.NS);
 	}
 	
