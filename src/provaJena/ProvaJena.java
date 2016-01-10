@@ -28,7 +28,7 @@ import org.jsoup.safety.Whitelist;
 
 public class ProvaJena {
 
-	/*Ontolology URI*/
+	/*Ontology URI*/
 	private final static String SOURCE_URI = "http://www.semanticweb.org/francesco/ontologies/2016/docs.owl";
 	/*Path file on disk*/
 	private final static String SOURCE_PATH = "src/docs.owl";
@@ -37,7 +37,7 @@ public class ProvaJena {
 	/*CRM namespace*/
 	private final static String CRM_NS = "http://www.cidoc-crm.org/cidoc-crm/";
 	/*Dataset path*/
-	private final static String DATA_PATH = "lib/datasetWithKeyWord";
+	private final static String DATA_PATH = "lib/datasetWithKeyWord/";
 
 	/*Control string*/
 	private final static String ARTICLE = "</article>";
@@ -228,7 +228,7 @@ public class ProvaJena {
 	}
 
 	/**Add a new individual in the owl file**/
-	private static void addIndividual(OntModel moddel, FileWriter out) {
+	private static void addIndividual(OntModel model, FileWriter out) {
 		if(Key.PRINT_ON_FILE){
 			try{
 				model.write(out, "RDF/XML");
