@@ -6666,6 +6666,14 @@ Note, that the class E9 Move inherits the property P7 took place at (witnessed):
     
 
 
+    <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#Keyword -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#Keyword">
+        <rdfs:subClassOf rdf:resource="&cidoc-crm;E33_Linguistic_Object"/>
+    </owl:Class>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
