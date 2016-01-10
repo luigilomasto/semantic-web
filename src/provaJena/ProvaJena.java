@@ -162,27 +162,27 @@ public class ProvaJena {
 					//prod.addProperty(took_place_at, e_place);
 					doc.addProperty(hasTitle, e_title);
 						
-					/*foreach topic*/
-					Iterator<String> topic_it = row_topics.iterator();
-					while(topic_it.hasNext()){
-						String curr_topic = topic_it.next();
-						Individual top = model.createIndividual(NS+curr_topic,topic);
-						doc.addProperty(bears_features, top);
-					}
 					//g = model.add(model);
 
 				}
 				
-				Iterator<String> keyword_it = row_keywords.iterator();
+				/*foreach topic*/
+				Iterator<String> topic_it = row_topics.iterator();
+				while(topic_it.hasNext()){
+					String curr_topic = topic_it.next();
+					Individual top = model.createIndividual(NS+curr_topic,topic);
+					doc.addProperty(bears_features, top);
+				}
 				
+				//foreach keyword
+				Iterator<String> keyword_it = row_keywords.iterator();
 				while(keyword_it.hasNext()){
 					String curr_keyword = keyword_it.next();
 					Individual key = model.createIndividual(NS+curr_keyword,keyword);
 					doc.addProperty(is_identified_by, key);
 				}
 				
-				
-				
+				//cleaning
 				refreshVariables();
 			
 			}
