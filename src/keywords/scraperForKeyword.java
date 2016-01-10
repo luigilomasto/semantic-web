@@ -110,7 +110,7 @@ public class scraperForKeyword {
 					if(!abstract_Text.equals("")){
 
 						//Document s=KeywordExtractor.extractKeyword(abstract_Text, "lib/api_key.txt");
-						Document s=KeywordExtractor.extractKeyword(abstract_Text, "/home/luigi/git/solid-memory/lib/API_key/andrea");
+						Document s=KeywordExtractor.extractKeyword(abstract_Text, "lib/API_key/andrea");
 						String keywordDocument = getStringFromDocument(s);
 						w.write(keywordDocument);
 
