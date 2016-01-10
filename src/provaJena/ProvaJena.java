@@ -53,6 +53,7 @@ public class ProvaJena {
 	private static String row_title ="";
 	private static String row_time = "";
 	private static ArrayList<String> row_topics = new ArrayList<String>();
+	private static ArrayList<String> row_keywords = new ArrayList<String>();
 	/*Global model*/
 	private static OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 	protected static Model g;
@@ -171,6 +172,15 @@ public class ProvaJena {
 
 				}
 				
+				Iterator<String> keyword_it = row_keywords.iterator();
+				
+				while(keyword_it.hasNext()){
+					String curr_keyword = keyword_it.next();
+					//TODO add to model here
+				}
+				
+				
+				
 				refreshVariables();
 			
 			}
@@ -185,6 +195,9 @@ public class ProvaJena {
 			}
 			else if(line.startsWith(TOPIC)){
 				row_topics.add(extractInfo(line));
+			}
+			else if(line.startsWith(KEYWORD)){
+				row_keywords.add(extractInfo(line));
 			}
 				
 			line = br.readLine();
