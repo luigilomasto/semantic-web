@@ -31,13 +31,13 @@ public class ProvaJena {
 	/*Ontolology URI*/
 	private final static String SOURCE_URI = "http://www.semanticweb.org/francesco/ontologies/2016/docs.owl";
 	/*Path file on disk*/
-	private final static String SOURCE_PATH = "C:/Users/Francesco/Documenti/Università/Magistrale/Web_Semantico/Progetto/docs.owl";
+	private final static String SOURCE_PATH = "src/docs.owl";
 	/*Namespace*/
 	private final static String NS = "http://www.semanticweb.org/francesco/ontologies/2016/docs#";
 	/*CRM namespace*/
 	private final static String CRM_NS = "http://www.cidoc-crm.org/cidoc-crm/";
 	/*Dataset path*/
-	private final static String DATA_PATH = "C:/Users/Francesco/Documenti/Università/Magistrale/Web_Semantico/Progetto/dataset/";
+	private final static String DATA_PATH = "dataset/";
 
 	/*Control string*/
 	private final static String ARTICLE = "</article>";
@@ -54,11 +54,13 @@ public class ProvaJena {
 	private static String row_time = "";
 	private static ArrayList<String> row_topics = new ArrayList<String>();
 	/*Global model*/
-	private static OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM );
+	private static OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 	static Model g;
+	
+	
 	public static void main(String[] args) throws IOException, UnsupportedEncodingException {
 		
-		FileWriter out = new FileWriter("C:/Users/Francesco/Desktop/docs_ontology.owl");
+		FileWriter out = new FileWriter("docs_ontology.owl");
 		readExternalModel(model);
 		int count=0;
 		
@@ -246,14 +248,12 @@ public class ProvaJena {
 		/*Append as submodel on the global model*/
 		model.addSubModel(myOntology);
 		/*Set the prefix for the related Namespace*/
-		model.setNsPrefix( "sd", NS );
+		model.setNsPrefix("sd", NS );
 		model.setNsPrefix("owl", OWL.NS);
 	}
 	
 	/**Provides to extract the text between XML tags**/
 	private static String extractInfo(String line){
-		
-		
 		/*remove eventual html tags within the string*/
 		line = Jsoup.clean(line, Whitelist.basic());
 
