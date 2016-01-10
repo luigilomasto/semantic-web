@@ -1,6 +1,9 @@
 Web Semantic Project
 
-Put api_key.txt in lib folder in order to work.
+Le api_key si trovano sulla cartella condivisa dropbox, basta copiare la cartella in lib.
+Idem per i dataset, basta copiare le cartelle datasetWithKeyWord e datasetWithAbstract nella cartella lib.
+
+NB: NON FARE PUSH DELLE API_KEY E DEI DATASET.
 
 *COME USARE scraperForKeyword*
 
