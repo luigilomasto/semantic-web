@@ -2,24 +2,35 @@ package scraper;
 
 public class FactoryScraper {
 	
+	private SuperScraper jdispla;
+	private SuperScraper jkdb;
+	private SuperScraper ijiem;
+	private SuperScraper standard;
+	
+	public FactoryScraper(){
+		jdispla = new JDisplaScraper();
+		jkdb = new JkdbScraper();
+		ijiem = new IJIEMScraper();
+		standard = new StandardScraper();
+	}
+	
 	public SuperScraper createScraper(String line){
-		SuperScraper toReturn = null;
 		
 		if(line.contains("<ee>")){
 			if(line.contains("j.displa.") || line.contains("j.compind")){
-				toReturn = new JDisplaScraper();
+				return jdispla;
 			}
 			else{
 				if(line.contains("jkdb")){
-					toReturn = new JkdbScraper();
+					return jkdb;
 				}else if(line.contains("IJIEM.")){
-						toReturn = new IJIEMScraper();
+					return ijiem;
 				}
 				else{
-					toReturn = new StandardScraper();
+					return standard;
 				}
 			}
 		}
-		return toReturn;
+		return null;
 	}
 }
