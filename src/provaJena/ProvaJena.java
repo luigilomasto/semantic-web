@@ -61,7 +61,7 @@ public class ProvaJena {
 	
 	public static void main(String[] args) throws IOException, UnsupportedEncodingException {
 		
-		FileWriter out = new FileWriter("docs_ontology.owl");
+		FileWriter out = new FileWriter("output/docs_ontology.owl");
 		readExternalModel(model);
 		int count=0;
 		
@@ -204,7 +204,8 @@ public class ProvaJena {
 				row_topics.add(extractInfo(line));
 			}
 			else if(line.startsWith(KEYWORD)){
-				row_keywords.add(extractInfo(line));
+				double k_relevance = Double.parseDouble(extractInfo(br.readLine()));
+				row_keywords.add(extractInfo(br.readLine()));
 			}
 				
 			line = br.readLine();
