@@ -139,10 +139,14 @@ public class ProvaJena {
 				count++;
 				Iterator<String> aut_it = row_authors.iterator();
 				Individual doc = model.createIndividual(NS +""+count,e_document);
+				Individual prod = model.createIndividual(NS+"Working at writing paper"+count,production);
+
 				Individual time = model.createIndividual(NS +row_time,time_span);
 				//Individual e_place = model.createIndividual(NS+"",place);
 				Individual e_title = model.createIndividual(NS+row_title,title);
 				doc.addProperty(hasTitle, e_title);
+				prod.addProperty(hasProduced, doc);
+				prod.addProperty(has_time_span, time);
 
 				/*foreach topic*/
 				Iterator<String> topic_it = row_topics.iterator();
@@ -165,20 +169,18 @@ public class ProvaJena {
 				while(aut_it.hasNext()){
 					/*Create individual*/
 					String curr_aut = aut_it.next();
-					Individual prod = model.createIndividual(NS+"Working at writing paper"+count,production);
 
 					Individual aut = model.createIndividual(NS+curr_aut,author);
 					//Individual app = model.createIndividual(NS + curr_aut,appellation);
 					/*Adding comment*/
-					aut.addComment("Instance of the "+count+" document","");
+					//aut.addComment("Instance of the "+count+" document","");
 					
 					
 					/*Adding property*/
 					aut.addProperty(name, URLDecoder.decode(curr_aut,"utf-8"));
 					
 					prod.addProperty(carried, aut);
-					prod.addProperty(hasProduced, doc);
-					prod.addProperty(has_time_span, time);
+					
 					//prod.addProperty(took_place_at, e_place);
 						
 					//g = model.add(model);
