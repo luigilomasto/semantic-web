@@ -15,7 +15,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.commons.logging.Log;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -68,7 +67,7 @@ public class scraperForKeyword {
 
 	public static void main(String [] args) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException{
 		numeroRigheLette=0;
-		nArticoli = 3670; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
+		nArticoli = 0; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
 		int articoliGialetti=nArticoli; //articoli già letti, viene usata come appoggio
 		int articoliDaLeggere=900; // numero di articoli da leggere
 		boolean abstractB=false;
@@ -81,7 +80,7 @@ public class scraperForKeyword {
 
 		FileWriter w;
 		// questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
-		w=new FileWriter("lib/datasetWithKeyWord/dataset2.xml"); //
+		w=new FileWriter("lib/datasetWithKeyWord/dataset1.xml"); //
 
 		int counter=0;
 

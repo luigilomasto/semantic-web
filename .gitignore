@@ -1,3 +1,5 @@
 /bin/
-api_key.txt
+lib/API_key/
+lib/datasetWithKeyWord/
+lib/datasetWithAbstract/
 *~
