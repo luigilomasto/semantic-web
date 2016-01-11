@@ -206,8 +206,7 @@ public class ProvaJena {
 				row_topics.add(extractInfo(line));
 			}
 			else if(line.startsWith(KEYWORD)){
-				double k_relevance = Double.parseDouble(extractInfo(br.readLine()));
-				row_keywords.add(extractInfo(br.readLine()));
+				row_keywords.add(extractInfo(line));
 			}
 				
 			line = br.readLine();
