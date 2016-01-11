@@ -139,33 +139,11 @@ public class ProvaJena {
 				count++;
 				Iterator<String> aut_it = row_authors.iterator();
 				Individual doc = model.createIndividual(NS +""+count,e_document);
-				Individual prod = model.createIndividual(NS+"Working at writing paper"+count,production);
 				Individual time = model.createIndividual(NS +row_time,time_span);
 				//Individual e_place = model.createIndividual(NS+"",place);
 				Individual e_title = model.createIndividual(NS+row_title,title);
-				
-				/*foreach author*/
-				while(aut_it.hasNext()){
-					/*Create individual*/
-					String curr_aut = aut_it.next();
-					Individual aut = model.createIndividual(NS+curr_aut,author);
-					//Individual app = model.createIndividual(NS + curr_aut,appellation);
-					/*Adding comment*/
-					aut.addComment("Instance of the "+count+" document","");
-					
-					
-					/*Adding property*/
-					aut.addProperty(name, URLDecoder.decode(curr_aut,"utf-8"));
-					prod.addProperty(carried, aut);
-					prod.addProperty(hasProduced, doc);
-					prod.addProperty(has_time_span, time);
-					//prod.addProperty(took_place_at, e_place);
-					doc.addProperty(hasTitle, e_title);
-						
-					//g = model.add(model);
+				doc.addProperty(hasTitle, e_title);
 
-				}
-				
 				/*foreach topic*/
 				Iterator<String> topic_it = row_topics.iterator();
 				while(topic_it.hasNext()){
@@ -181,6 +159,33 @@ public class ProvaJena {
 					Individual key = model.createIndividual(NS+curr_keyword,keyword);
 					doc.addProperty(is_identified_by, key);
 				}
+				
+				
+				/*foreach author*/
+				while(aut_it.hasNext()){
+					/*Create individual*/
+					String curr_aut = aut_it.next();
+					Individual prod = model.createIndividual(NS+"Working at writing paper"+count,production);
+
+					Individual aut = model.createIndividual(NS+curr_aut,author);
+					//Individual app = model.createIndividual(NS + curr_aut,appellation);
+					/*Adding comment*/
+					aut.addComment("Instance of the "+count+" document","");
+					
+					
+					/*Adding property*/
+					aut.addProperty(name, URLDecoder.decode(curr_aut,"utf-8"));
+					
+					prod.addProperty(carried, aut);
+					prod.addProperty(hasProduced, doc);
+					prod.addProperty(has_time_span, time);
+					//prod.addProperty(took_place_at, e_place);
+						
+					//g = model.add(model);
+
+				}
+				
+				
 				
 				//cleaning
 				refreshVariables();
