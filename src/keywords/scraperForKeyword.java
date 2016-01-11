@@ -24,7 +24,7 @@ public class scraperForKeyword {
 	private static BufferedReader reader;
 	private static int numeroRigheLette;
 	private static int nArticoli;
-	
+
 
 	//restituisce la stringa contenente le keyword con rilevanza >0.5
 	private static String getStringFromDocument(Document doc) throws IOException {
@@ -53,8 +53,8 @@ public class scraperForKeyword {
 					toReturn+="<keyword>\n";
 					toReturn+="<relevance>"+relevance+"</relevance>\n";
 					toReturn+="<text>"+text2[0]+"</text>\n";
-                    toReturn+="</keyword>\n";
-					
+					toReturn+="</keyword>\n";
+
 				}
 			}
 
@@ -67,11 +67,11 @@ public class scraperForKeyword {
 
 	public static void main(String [] args) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException{
 		numeroRigheLette=0;
-		nArticoli = 0; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
+		nArticoli = 3596; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
 		int articoliGialetti=nArticoli; //articoli già letti, viene usata come appoggio
 		int articoliDaLeggere=900; // numero di articoli da leggere
 		boolean abstractB=false;
-		reader = new BufferedReader(new FileReader("lib/datasetWithAbstract/dataset1.xml"));
+		reader = new BufferedReader(new FileReader("lib/datasetWithAbstract/dataset.xml"));
 
 
 		String line = reader.readLine();
@@ -80,7 +80,7 @@ public class scraperForKeyword {
 
 		FileWriter w;
 		// questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
-		w=new FileWriter("lib/datasetWithKeyWord/dataset1.xml"); //
+		w=new FileWriter("lib/datasetWithKeyWord/dataset5.xml"); //
 
 		int counter=0;
 
@@ -114,9 +114,9 @@ public class scraperForKeyword {
 
 						//Document s=KeywordExtractor.extractKeyword(abstract_Text, "lib/api_key.txt");
 						try{
-						Document s=KeywordExtractor.extractKeyword(abstract_Text, "/home/luigi/git/solid-memory/lib/API_key/andrea");
-						String keywordDocument = getStringFromDocument(s);
-						w.write(keywordDocument);
+							Document s=KeywordExtractor.extractKeyword(abstract_Text, "/home/luigi/git/solid-memory/lib/API_key/marco");
+							String keywordDocument = getStringFromDocument(s);
+							w.write(keywordDocument);
 						}
 						catch(IOException e){
 							System.out.println("errore strano:Error making API call: unsupported-text-language.");
@@ -125,7 +125,8 @@ public class scraperForKeyword {
 					}
 
 					abstract_Text="";
-					w.write(line+"\n");
+					/*if(!line.contains("</abstract>"))
+						w.write(line+"\n");*/
 				}//se sto nell'abstract
 				else if(abstractB){
 					abstract_Text+=line;

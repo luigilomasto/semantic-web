@@ -17,11 +17,11 @@ public class Count {
 	static int failureConnect=0;
 	public static void main(String [] args) throws FileNotFoundException, IOException {
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/article.xml"));
-		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jdispla_dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jdispla_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jkdb_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/j.combind_dblp.xml"));
-		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/IJIEM_dblp.xml"));
+		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/IJIEM_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp(2).xml"));
 		String line = reader.readLine();
