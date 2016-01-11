@@ -15,6 +15,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.commons.logging.Log;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -48,10 +49,13 @@ public class scraperForKeyword {
 				String []text2=text1[1].split("</text>");
 
 				double relevance = Double.parseDouble(relevance2[0]);
-				//prendo le keyword con relevance > 0.3
-				if(relevance*10 >= 5){
-					toReturn+="<keyword>\n<relevance>"+relevance+"</relevance>\n";
-					toReturn+="<text>"+text2[0]+"</text>\n</keyword>\n";	
+				//prendo le keyword con relevance > 0.6
+				if(relevance*10 >= 6){
+					toReturn+="<keyword>\n";
+					toReturn+="<relevance>"+relevance+"</relevance>\n";
+					toReturn+="<text>"+text2[0]+"</text>\n";
+                    toReturn+="</keyword>\n";
+					
 				}
 			}
 
@@ -64,7 +68,7 @@ public class scraperForKeyword {
 
 	public static void main(String [] args) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException{
 		numeroRigheLette=0;
-		nArticoli = 0; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
+		nArticoli = 3670; // questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
 		int articoliGialetti=nArticoli; //articoli già letti, viene usata come appoggio
 		int articoliDaLeggere=900; // numero di articoli da leggere
 		boolean abstractB=false;
@@ -77,7 +81,7 @@ public class scraperForKeyword {
 
 		FileWriter w;
 		// questa variabile varia ad ogni lancio, il suo valore dipende dagli articoli già letti
-		w=new FileWriter("lib/datasetWithKeyWord/dataset1.xml"); //
+		w=new FileWriter("lib/datasetWithKeyWord/dataset2.xml"); //
 
 		int counter=0;
 
@@ -103,16 +107,21 @@ public class scraperForKeyword {
 					abstractB=true;
 
 				}//se l'abstract finisce incontro <ee> <topic> <keyword>
-				else if(abstractB && (line.contains("<ee>"))|| line.contains("<topic>")|| line.contains("<keyword>")){
+				else if(abstractB && line.contains("</abstract>")){
 					abstractB=false;
 					abstract_Text=abstract_Text.replace("<abstract>","");
 					abstract_Text=abstract_Text.replace("</abstract>","");
 					if(!abstract_Text.equals("")){
 
 						//Document s=KeywordExtractor.extractKeyword(abstract_Text, "lib/api_key.txt");
+						try{
 						Document s=KeywordExtractor.extractKeyword(abstract_Text, "/home/luigi/git/solid-memory/lib/API_key/andrea");
 						String keywordDocument = getStringFromDocument(s);
 						w.write(keywordDocument);
+						}
+						catch(IOException e){
+							System.out.println("errore strano:Error making API call: unsupported-text-language.");
+						}
 
 					}
 

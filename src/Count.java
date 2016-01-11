@@ -10,27 +10,27 @@ import scraper.SuperScraper;
 
 
 public class Count {
-    static int count=0;
+	static int count=0;
 	static boolean DEBUG=false;
 	static boolean DEBUGException=false;
 	static boolean GENERATE=true;
 	static int failureConnect=0;
 	public static void main(String [] args) throws FileNotFoundException, IOException {
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/article.xml"));
-	    //BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jdispla_dblp.xml"));
+		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jdispla_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jkdb_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/j.combind_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/IJIEM_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp.xml"));
-		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp(2).xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp(2).xml"));
 		String line = reader.readLine();
 
 		FileWriter w;
-		w=new FileWriter("/home/luigi/Scrivania/output.xml");
+		w=new FileWriter("/home/luigi/Scrivania/abstract2.xml");
 
 		//ricopiaArticoli(reader,line,w);
- 
+
 		parsing(reader,line,w);
 
 	}
@@ -43,12 +43,15 @@ public class Count {
 
 		while(line!=null && nArticoli<=5000) {
 
-			// contiene l'URL dell'articolo la prendiamo e lo passiamo alla funzione che estrae abstract e parolechiave
-			if(line.contains("<title>")){
+			if(line.contains("<article")){
 				++nArticoli;
-				scraper = f.createScraper(line);
-				scraper.scrape(w, line);
 			}
+			else
+				// contiene l'URL dell'articolo la prendiamo e lo passiamo alla funzione che estrae abstract e parolechiave
+				if(line.contains("<ee>")){
+					scraper = f.createScraper(line);
+					scraper.scrape(w, line);
+				}
 			if(GENERATE)
 				w.write(line+"\n");
 
@@ -57,7 +60,7 @@ public class Count {
 
 
 		w.flush();
-		
+
 		System.out.println(nArticoli);
 
 	}
@@ -69,14 +72,14 @@ public class Count {
 
 		while(line!=null) {
 
-			if(line.contains("<ee>")&& line.contains("dx.doi.org") && (/*line.contains("s00") || line.contains("BF") ||*/ line.contains("IJIEM.") || line.contains("j.displa.") || line.contains("jkdb") || line.contains("jdkb") || line.contains("j.compind"))){
+			if(line.contains("<ee>")&& line.contains("dx.doi.org")/* && (line.contains("s00") || line.contains("BF") || line.contains("IJIEM.") || line.contains("j.displa.") || line.contains("jkdb") || line.contains("jdkb") || line.contains("j.compind"))*/){
 				copia=true;
 				articolo+=line+"\n";
 			}
 			else
 				if(line.contains("</article>") && !copia){
 					articolo="";
-					
+
 				}
 				else
 					if(line.contains("</article>") && copia){

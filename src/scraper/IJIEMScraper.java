@@ -18,13 +18,13 @@ public class IJIEMScraper extends SuperScraper {
 
 	public void scrape(FileWriter w, String line) throws IOException {
 		if(GENERATE)
-			w.write("<abstract>");
+			w.write("<abstract>\n");
 
 		String URL[]=line.split("<ee>");
 		String URL2[]=URL[1].split("</ee>");
 		try{
 			Document page=returnPage(URL2[0]);
-			
+
 			//*[@id="col1"]/div/table/tbody/tr/td/font/text()
 			Elements elemsAbstract = page.select("#col1 > div > table > tbody > tr > td > font");
 			if(elemsAbstract.size()>0){
@@ -34,16 +34,17 @@ public class IJIEMScraper extends SuperScraper {
 				if(GENERATE)
 					w.write(elem.text().toString());
 			}
+			if(GENERATE)
+				w.write("\n</abstract>\n");
 
-			w.write("</abstract>\n");
+
 
 		} 
-		catch(ConnectException e){ failureConnect++;if(DEBUGException){System.out.print("Connessione rifiutata "+URL2[0]+" ");System.out.println(failureConnect);}}
-		catch(HttpStatusException e){failureConnect++;if(DEBUGException){System.out.print("Status=404 "+URL2[0]+" ");System.out.println(failureConnect);}}
-		catch(SocketTimeoutException e){failureConnect++;if(DEBUGException){System.out.print("Socket timeout "+URL2[0]+" ");System.out.println(failureConnect);}}
-		catch(UnknownHostException e){failureConnect++;if(DEBUGException){System.out.print("dx.doi.org "+URL2[0]+" ");System.out.println(failureConnect);}}
-		catch(UnsupportedMimeTypeException e){failureConnect++;if(DEBUGException){System.out.print("jsoup "+URL2[0]+" ");System.out.println(failureConnect);}}
-
+		catch(ConnectException e){ w.write("\n</abstract>\n"); failureConnect++;if(DEBUGException){System.out.print("Connessione rifiutata "+URL2[0]+" ");System.out.println(failureConnect);}}
+		catch(HttpStatusException e){w.write("\n</abstract>\n"); failureConnect++;if(DEBUGException){System.out.print("Status=404 "+URL2[0]+" ");System.out.println(failureConnect);}}
+		catch(SocketTimeoutException e){w.write("\n</abstract>\n"); failureConnect++;if(DEBUGException){System.out.print("Socket timeout "+URL2[0]+" ");System.out.println(failureConnect);}}
+		catch(UnknownHostException e){w.write("\n</abstract>\n"); failureConnect++;if(DEBUGException){System.out.print("dx.doi.org "+URL2[0]+" ");System.out.println(failureConnect);}}
+		catch(UnsupportedMimeTypeException e){w.write("\n</abstract>\n"); failureConnect++;if(DEBUGException){System.out.print("jsoup "+URL2[0]+" ");System.out.println(failureConnect);}}
 	}
 
 
