@@ -163,7 +163,7 @@ public class ProvaJena {
 				Iterator<String> topic_it = row_topics.iterator();
 				while(topic_it.hasNext()){
 					String curr_topic = topic_it.next();
-					Individual top = model.createIndividual(NS+curr_topic,topic);
+					Individual top = model.createIndividual(NS+curr_topic+count,topic);
 					top.addProperty(topic_value, URLDecoder.decode(curr_topic, "utf-8"));
 					doc.addProperty(bears_features, top);
 				}
@@ -172,7 +172,7 @@ public class ProvaJena {
 				Iterator<Keyword> keyword_it = row_keywords.iterator();
 				while(keyword_it.hasNext()){
 					Keyword curr_keyword = keyword_it.next();
-					Individual Key = model.createIndividual(NS+curr_keyword.getText(),keyword);
+					Individual Key = model.createIndividual(NS+curr_keyword.getText()+count,keyword);
 					Key.addProperty(hasText, URLDecoder.decode(curr_keyword.getText(),"utf-8"));
 					Key.addProperty(hasRelevance, ""+curr_keyword.getRelevance());
 					doc.addProperty(is_identified_by, Key);
@@ -201,7 +201,7 @@ public class ProvaJena {
 					//g = model.add(model);
 
 				}
-				if(count==100)
+				if(count==1000)
 					break;
 				//cleaning
 				refreshVariables();
