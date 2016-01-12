@@ -5065,6 +5065,51 @@ Since Time-Spans may not have precisely known temporal extents, the CRM supports
     
 
 
+    <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#Anno -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#Anno">
+        <rdfs:domain rdf:resource="&cidoc-crm;E52_Time-Span"/>
+        <rdfs:range rdf:resource="&xsd;int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#Relevance -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#Relevance">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/francesco/ontologies/2016/docs#Keyword"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#Text -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#Text">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/francesco/ontologies/2016/docs#Keyword"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#Title_value -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#Title_value">
+        <rdfs:domain rdf:resource="&cidoc-crm;E35_Title"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#Topic_value -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#Topic_value">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/francesco/ontologies/2016/docs#Topic"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#name -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#name">
@@ -6669,6 +6714,14 @@ Note, that the class E9 Move inherits the property P7 took place at (witnessed):
     <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#Keyword -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#Keyword">
+        <rdfs:subClassOf rdf:resource="&cidoc-crm;E33_Linguistic_Object"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/francesco/ontologies/2016/docs#Topic -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/francesco/ontologies/2016/docs#Topic">
         <rdfs:subClassOf rdf:resource="&cidoc-crm;E33_Linguistic_Object"/>
     </owl:Class>
     

@@ -102,6 +102,13 @@ public class ProvaJena {
 		OntProperty name = model.getOntProperty(NS+"name");
 		OntProperty bears_features = model.getOntProperty(CRM_NS+"P56_bears_feature");
 		OntProperty is_identified_by = model.getOntProperty(CRM_NS+"P149_is_identified_by");
+		OntProperty hasText = model.getOntProperty(NS+"Text");
+		OntProperty hasRelevance = model.getOntProperty(NS+"Relevance");
+		OntProperty hasAnno = model.getOntProperty(NS+"Anno");
+		OntProperty title_value = model.getOntProperty(NS+"Title_value");
+		OntProperty topic_value = model.getOntProperty(NS+"Topic_value");
+
+
 		
 		/*XML parser
 		SAXBuilder builder = new SAXBuilder();
@@ -128,7 +135,7 @@ public class ProvaJena {
 		
 		
 		/*Reading XML File*/
-		BufferedReader br = new BufferedReader(new FileReader(DATA_PATH+"dataset1.xml"));
+		BufferedReader br = new BufferedReader(new FileReader(DATA_PATH+"dataset.xml"));
 		String line = br.readLine();
 		while(line!=null){
 			if(Key.PRINT_DOC)
@@ -142,8 +149,12 @@ public class ProvaJena {
 				Individual prod = model.createIndividual(NS+"Working at writing paper"+count,production);
 
 				Individual time = model.createIndividual(NS +row_time,time_span);
+				time.addProperty(hasAnno, row_time);
+				
 				//Individual e_place = model.createIndividual(NS+"",place);
 				Individual e_title = model.createIndividual(NS+row_title,title);
+				e_title.addProperty(title_value, URLDecoder.decode(row_title,"UTF-8"));
+				
 				doc.addProperty(hasTitle, e_title);
 				prod.addProperty(hasProduced, doc);
 				prod.addProperty(has_time_span, time);
@@ -153,6 +164,7 @@ public class ProvaJena {
 				while(topic_it.hasNext()){
 					String curr_topic = topic_it.next();
 					Individual top = model.createIndividual(NS+curr_topic,topic);
+					top.addProperty(topic_value, URLDecoder.decode(curr_topic, "utf-8"));
 					doc.addProperty(bears_features, top);
 				}
 				
@@ -160,9 +172,11 @@ public class ProvaJena {
 				Iterator<Keyword> keyword_it = row_keywords.iterator();
 				while(keyword_it.hasNext()){
 					Keyword curr_keyword = keyword_it.next();
-					//TODO aggiungere proprietà relevance
-					Individual key = model.createIndividual(NS+curr_keyword.getText(),keyword);
-					doc.addProperty(is_identified_by, key);
+					Individual Key = model.createIndividual(NS+curr_keyword.getText(),keyword);
+					Key.addProperty(hasText, URLDecoder.decode(curr_keyword.getText(),"utf-8"));
+					Key.addProperty(hasRelevance, ""+curr_keyword.getRelevance());
+					doc.addProperty(is_identified_by, Key);
+					
 				}
 				
 				
@@ -187,7 +201,8 @@ public class ProvaJena {
 					//g = model.add(model);
 
 				}
-				
+				if(count==100)
+					break;
 				//cleaning
 				refreshVariables();
 			
@@ -205,10 +220,9 @@ public class ProvaJena {
 				row_topics.add(extractInfo(line));
 			}
 			else if(line.startsWith(KEYWORD)){
-				String lR=br.readLine();
-				double relevance=Double.parseDouble(extractInfo(lR));
-				String lT=br.readLine();
-				String text=extractInfo(lT);
+				
+				double relevance=Double.parseDouble(extractInfo(br.readLine()));
+				String text=extractInfo(br.readLine());
 				Keyword newKeyword =new Keyword(text, relevance);
 				row_keywords.add(newKeyword);
 			}
