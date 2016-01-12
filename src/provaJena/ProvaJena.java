@@ -53,7 +53,7 @@ public class ProvaJena {
 	private static String row_title ="";
 	private static String row_time = "";
 	private static ArrayList<String> row_topics = new ArrayList<String>();
-	private static ArrayList<String> row_keywords = new ArrayList<String>();
+	private static ArrayList<Keyword> row_keywords = new ArrayList<Keyword>();
 	/*Global model*/
 	private static OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 	protected static Model g;
@@ -157,10 +157,11 @@ public class ProvaJena {
 				}
 				
 				//foreach keyword
-				Iterator<String> keyword_it = row_keywords.iterator();
+				Iterator<Keyword> keyword_it = row_keywords.iterator();
 				while(keyword_it.hasNext()){
-					String curr_keyword = keyword_it.next();
-					Individual key = model.createIndividual(NS+curr_keyword,keyword);
+					Keyword curr_keyword = keyword_it.next();
+					//TODO aggiungere proprietà relevance
+					Individual key = model.createIndividual(NS+curr_keyword.getText(),keyword);
 					doc.addProperty(is_identified_by, key);
 				}
 				
@@ -187,8 +188,6 @@ public class ProvaJena {
 
 				}
 				
-				
-				
 				//cleaning
 				refreshVariables();
 			
@@ -206,7 +205,12 @@ public class ProvaJena {
 				row_topics.add(extractInfo(line));
 			}
 			else if(line.startsWith(KEYWORD)){
-				row_keywords.add(extractInfo(line));
+				String lR=br.readLine();
+				double relevance=Double.parseDouble(extractInfo(lR));
+				String lT=br.readLine();
+				String text=extractInfo(lT);
+				Keyword newKeyword =new Keyword(text, relevance);
+				row_keywords.add(newKeyword);
 			}
 				
 			line = br.readLine();
@@ -231,7 +235,7 @@ public class ProvaJena {
 		row_title ="";
 		row_time = "";
 		row_topics = new ArrayList<String>();
-		row_keywords = new ArrayList<String>();
+		row_keywords = new ArrayList<Keyword>();
 	}
 
 	/**Add a new individual in the owl file**/
