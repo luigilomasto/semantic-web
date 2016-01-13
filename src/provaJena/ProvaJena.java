@@ -166,6 +166,7 @@ public class ProvaJena {
 					Individual top = model.createIndividual(NS+curr_topic+count,topic);
 					top.addProperty(topic_value, URLDecoder.decode(curr_topic, "utf-8"));
 					doc.addProperty(bears_features, top);
+					
 				}
 				
 				//foreach keyword
@@ -201,8 +202,7 @@ public class ProvaJena {
 					//g = model.add(model);
 
 				}
-				if(count==1000)
-					break;
+				
 				//cleaning
 				refreshVariables();
 			
@@ -212,6 +212,7 @@ public class ProvaJena {
 			}
 			else if(line.startsWith(TITLE)){
 				row_title = extractInfo(line);
+				System.out.println(row_title);
 			}
 			else if(line.startsWith(YEAR)){
 				row_time = extractInfo(line);

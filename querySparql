@@ -1,0 +1,162 @@
+// PER PRENDERE I TOPIC DI UN ARTICOLO A PARTIRE DAL TITOLO
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+
+SELECT  ?title_value ?topic_value
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "Representation of Graphs".
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P56_bears_feature ?topic.
+  ?topic sd:Topic_value ?topic_value.
+}
+---------------------------------------------------------------------------------
+// PER PRENDERE KEYWORD E RELEVANCE DI UN ARTICOLO A PARTIRE DAL TITOLO
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+
+SELECT  ?title_value ?t ?r
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "Representation of Graphs".
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Text ?t.
+  ?key sd:Relevance ?r
+}
+
+--------------------------------------------------------------------------
+//A PARTIRE DAI TOPIC DI UN ARTICOLO RESTITUISCE LA LISTA DEGLI ARTICOLI CON IL NUMERO DI TOPIC IN COMUNE
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+
+SELECT   ?title_value (COUNT(DISTINCT ?topic_value) AS ?count) 
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P56_bears_feature ?topic.
+
+  {?topic sd:Topic_value "Software Engineering/Programming and Operating Systems".} UNION
+  {?topic sd:Topic_value "Computer Systems Organization and Communication Networks".} UNION
+  {?topic sd:Topic_value "Computational Mathematics and Numerical Analysis".} UNION
+  {?topic sd:Topic_value "Information Systems and Communication Service".} UNION
+  {?topic sd:Topic_value "Theory of Computation".} UNION
+  {?topic sd:Topic_value "Data Structures, Cryptology and Information Theory".}.
+  ?topic sd:Topic_value $topic_value.
+
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+ 
+  FILTER (?title_value != "Representation of Graphs").
+}
+GROUP BY ?title_value
+ORDER BY ?title_value
+
+------------------------------------------------------------------------------------------
+//A PARTIRE DA UN articolo restituisce la somma delle relevance
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT   ?title_value  (SUM(xsd:double(?r)) as ?totalR)
+{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "Representation of Graphs".
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r
+}
+
+group by ?title_value
+------------------------------------------------------------------------------------------
+//RESTITUISCE LA SOMMA DELLE RELEVANCE PER OGNI ARTICOLO
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT   ?title_value  (SUM(xsd:double(?r)) as ?totalR)
+{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t
+}
+
+group by ?title_value
+
+
+
+------------------------------------------------------------------------------------------
+// DATE DELLE KEYWORD RESTITUISCE LA LISTA DI TUTTI GLI ARTICOLI CHE CONTENGONO UN SOTTOINSIEME DI TALI KEYWORD CON LA SOMMA DELLE RELEVANCE
+// ESCLUDENDO L'ARTICOLO DI PARTENZA DAL QUALE SI SONO OTTENUTE LE KEYWORD INIZIALI
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT   ?title_value  (SUM(xsd:double(?r)) as ?totalR) (COUNT(DISTINCT ?t) AS ?NumKeyword) 
+WHERE
+{
+  {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="following sense")} UNION 
+  {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="transition systems")} UNION
+  {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="label-disjoint cycles")}UNION
+  {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="finite labelled transition")}UNION
+   {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="finite set")}
+  
+  FILTER(?title_value!="A decomposition theorem for finite persistent transition systems").
+}
+
+group by ?title_value
+ORDER BY DESC(?totalR) 
+
+--------------------------------------------------------------------------------------------------
+
+
