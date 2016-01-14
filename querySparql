@@ -90,7 +90,8 @@ Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT   ?title_value  (SUM(xsd:double(?r)) as ?totalR)
-{
+
+WHERE{
   ?prod crm:P108_has_produced ?doc.
   ?doc crm:P102_has_title ?title.
   ?title sd:Title_value ?title_value.
@@ -158,5 +159,38 @@ group by ?title_value
 ORDER BY DESC(?totalR) 
 
 --------------------------------------------------------------------------------------------------
+//Restituisce anno, rivista e url dato un articolo
 
 
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX cs: <http://purl.org/vocab/changeset/schema#>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+
+SELECT   ?year ?journal ?u
+WHERE {
+  
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "A layered approach to automated electrical safety analysis in automotive environments".
+  ?prod crm:P4_has_time-span ?doc_year.
+  ?doc_year sd:Anno ?year.
+  ?doc sd:published_by ?journal.
+  ?doc crm:P67_refers_to ?url.
+  ?url sd:Url_value ?u
+  
+}
+
+--------------------------------------------------------------------------------------------------
+//Restituisce gli autori dato un articolo
+
+SELECT  ?aut
+WHERE {
+  
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "A layered approach to automated electrical safety analysis in automotive environments".
+  ?prod crm:P14_carried_out_by ?author.
+  ?author sd:name ?aut.
+  
+}

@@ -47,6 +47,10 @@ public class ProvaJena {
 	//private final static String URL = "<url>";
 	private final static String KEYWORD = "<keyword>";
 	private final static String TOPIC = "<topic>";
+	private final static String URL = "<ee>";
+	private final static String JOURNAL = "<journal>";
+
+
 
 	/*Information variables*/
 	private static ArrayList<String> row_authors = new ArrayList<String>();
@@ -54,6 +58,8 @@ public class ProvaJena {
 	private static String row_time = "";
 	private static ArrayList<String> row_topics = new ArrayList<String>();
 	private static ArrayList<Keyword> row_keywords = new ArrayList<Keyword>();
+	private static String row_url="";
+	private static String row_journal="";
 	/*Global model*/
 	private static OntModel model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 	protected static Model g;
@@ -90,7 +96,10 @@ public class ProvaJena {
 		//OntClass appellation = model.getOntClass("E41_Appellation");
 		OntClass topic = model.getOntClass(NS+"Topic");
 		OntClass keyword = model.getOntClass(NS+"Keyword");
-		
+		OntClass e_url = model.getOntClass(NS+"Url");
+		OntClass e_journal = model.getOntClass(NS+"Journal");
+
+
 		/*Select properties*/
 		OntProperty carried = model.getOntProperty(CRM_NS+"P14_carried_out_by");
 		OntProperty hasProduced = model.getOntProperty(CRM_NS+"P108_has_produced");
@@ -107,6 +116,11 @@ public class ProvaJena {
 		OntProperty hasAnno = model.getOntProperty(NS+"Anno");
 		OntProperty title_value = model.getOntProperty(NS+"Title_value");
 		OntProperty topic_value = model.getOntProperty(NS+"Topic_value");
+		OntProperty journal_value = model.getOntProperty(NS+"Journal_value");
+		OntProperty url_value = model.getOntProperty(NS+"Url_value");
+		OntProperty published_by = model.getObjectProperty(NS+"published_by");
+		OntProperty refers_to = model.getOntProperty(CRM_NS+"P67_refers_to");
+
 
 
 		
@@ -144,20 +158,27 @@ public class ProvaJena {
 			/*New article has to be added to the owl file*/
 			if(line.startsWith(ARTICLE)){
 				count++;
+				/*Create Individuals*/
 				Iterator<String> aut_it = row_authors.iterator();
 				Individual doc = model.createIndividual(NS +""+count,e_document);
 				Individual prod = model.createIndividual(NS+"Working at writing paper"+count,production);
-
+				Individual url = model.createIndividual(NS+row_url,e_url);
 				Individual time = model.createIndividual(NS +row_time,time_span);
-				time.addProperty(hasAnno, row_time);
-				
 				//Individual e_place = model.createIndividual(NS+"",place);
 				Individual e_title = model.createIndividual(NS+row_title,title);
-				e_title.addProperty(title_value, URLDecoder.decode(row_title,"UTF-8"));
+				Individual journal = model.createIndividual(NS+row_journal,e_journal);
+
+				/*Add properties*/
 				
+				e_title.addProperty(title_value, URLDecoder.decode(row_title,"UTF-8"));
+				time.addProperty(hasAnno, row_time);
+				doc.addProperty(published_by, URLDecoder.decode(row_journal,"UTF-8"));
+				journal.addProperty(journal_value, URLDecoder.decode(row_journal,"UTF-8"));
+				url.addProperty(url_value, URLDecoder.decode(row_url, "UTF-8"));
 				doc.addProperty(hasTitle, e_title);
 				prod.addProperty(hasProduced, doc);
 				prod.addProperty(has_time_span, time);
+				doc.addProperty(refers_to, url);
 
 				/*foreach topic*/
 				Iterator<String> topic_it = row_topics.iterator();
@@ -194,7 +215,6 @@ public class ProvaJena {
 					
 					/*Adding property*/
 					aut.addProperty(name, URLDecoder.decode(curr_aut,"utf-8"));
-					
 					prod.addProperty(carried, aut);
 					
 					//prod.addProperty(took_place_at, e_place);
@@ -212,7 +232,6 @@ public class ProvaJena {
 			}
 			else if(line.startsWith(TITLE)){
 				row_title = extractInfo(line);
-				System.out.println(row_title);
 			}
 			else if(line.startsWith(YEAR)){
 				row_time = extractInfo(line);
@@ -227,6 +246,13 @@ public class ProvaJena {
 				Keyword newKeyword =new Keyword(text, relevance);
 				row_keywords.add(newKeyword);
 			}
+			else if(line.startsWith(URL)){
+				row_url = extractInfo(line);
+			}
+			else if(line.startsWith(JOURNAL)){
+				row_journal = extractInfo(line);
+			}
+
 				
 			line = br.readLine();
 		}
@@ -249,6 +275,8 @@ public class ProvaJena {
 		row_authors = new ArrayList<String>();
 		row_title ="";
 		row_time = "";
+		row_url="";
+		row_journal="";
 		row_topics = new ArrayList<String>();
 		row_keywords = new ArrayList<Keyword>();
 	}
