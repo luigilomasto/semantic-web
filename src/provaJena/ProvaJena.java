@@ -201,8 +201,7 @@ public class ProvaJena {
 					//g = model.add(model);
 
 				}
-				if(count==1000)
-					break;
+				
 				//cleaning
 				refreshVariables();
 			
