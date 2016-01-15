@@ -21,9 +21,10 @@ public class Count {
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/jkdb_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/j.combind_dblp.xml"));
-		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/IJIEM_dblp.xml"));
+		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/IJIEM_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp.xml"));
 		//BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/mio_dblp(2).xml"));
+		BufferedReader reader = new BufferedReader(new FileReader("/home/luigi/Scrivania/articoli.xml"));
 		String line = reader.readLine();
 
 		FileWriter w;
@@ -69,17 +70,21 @@ public class Count {
 	private static void ricopiaArticoli(BufferedReader reader, String line, FileWriter w) throws IOException {
 		boolean copia=false;
 		String articolo = "";
+		int nArticoli=0;
 
-		while(line!=null) {
-
-			if(line.contains("<ee>")&& line.contains("dx.doi.org")/* && (line.contains("s00") || line.contains("BF") || line.contains("IJIEM.") || line.contains("j.displa.") || line.contains("jkdb") || line.contains("jdkb") || line.contains("j.compind"))*/){
+		while(line!=null && nArticoli<6000) {
+ 
+			if(line.contains("<article"))
+				++nArticoli;
+			
+			if((line.contains("<ee>")&& line.contains("dx.doi.org") && (line.contains("s00") || line.contains("BF") || line.contains("IJIEM.") || line.contains("j.displa.") || line.contains("jkdb") || line.contains("jdkb") || line.contains("j.compind")))||(line.contains("<ee>")&& line.contains("dx.doi.org"))){
 				copia=true;
 				articolo+=line+"\n";
 			}
 			else
 				if(line.contains("</article>") && !copia){
 					articolo="";
-
+                    
 				}
 				else
 					if(line.contains("</article>") && copia){
