@@ -93,8 +93,8 @@ $('#sub').click(function() {
 	    newNodes.push(title)
 	    firstTime = false;
     }
-    for(var i = 0; i<layer;i++){
-	    for(var j = 0; j< newNodes.length; j++){
+    for(var i = 0; i < layer;i++){
+	    for(var j = 0; j < newNodes.length; j++){
 		    var d = newNodes[j];
 		    $.ajax(
 			{
@@ -122,11 +122,10 @@ $('#sub').click(function() {
 	if(nodes.length == 0){
 		nodes.push(JSON.parse('{"id":"' + title +'", "label": "s"}'));
 	}
-	var len = parsedData.articles.length;
-	for(var i = 0;i<len; i++){
-		var article = parsedData.articles[i];
+	for(var key in parsedData.articles){
+		var article = parsedData.articles[key];
 		var actualId = article.id;
-		var actualTitle = article.titolo;
+		var actualTitle = article.title;
 		if(nodes.indexOf(actualTitle) < 0){
 			var nodeToPush = JSON.parse('{"id":"' + actualTitle +'", "label":"' + actualId + '"}');
 			nodes.push(nodeToPush);
@@ -152,8 +151,6 @@ $('#sub').click(function() {
         for(var i = 0; i < data.nodes.length; i++) {
             $('#list-container ul').append('<li> id: ' + data.nodes[i].label + ' title: ' + data.nodes[i].id);
         }
-        
-        var options = parsedData.options;
         
         var custom_options = {
             interaction:{hover:true},
@@ -189,8 +186,7 @@ $('#sub').click(function() {
         var container = document.getElementById('mynetwork');
         
         // create a network
-        network = new vis.Network(container, data, options);
-        network.setOptions(custom_options);
+        network = new vis.Network(container, data, custom_options);
         
         network.on("hoverNode", function (params) {
             params.event = "[original event]";
@@ -199,7 +195,7 @@ $('#sub').click(function() {
         
         network.on("hoverEdge", function (params) {
             params.event = "[original event]";
-            document.getElementById('edgeSpan').innerHTML = '<h2>Edge information:</h2>' + params["edge"];
+            document.getElementById('edgeSpan').innerHTML = '<h2>Edge information:</h2>' + edgesMap[params["edge"]].keyword;
         });
         
         network.on("click", function(params) {
