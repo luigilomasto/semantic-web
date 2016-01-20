@@ -90,21 +90,24 @@ $('#sub').click(function() {
             }
         });
     function draw_graph(data) {
-        var parsedData = JSON.stringify(data);
+        var parsedData = JSON.parse(data);
 
-	var nodes, edges = [];
+	var nodes = [];
+	var edges = [];
 	edgesMap = {};
 	nodesMap = {};
 
-	nodes.push(JSON.parse('{"id":', + title +', "label": "s"}'));
+	nodes.push(JSON.parse('{"id":"' + title +'", "label": "s"}'));
 	var edgeId = 0;
 
-	for(var article in articles){
+	var len = parsedData.articles.length;
+	for(var i = 0;i<len; i++){
+		var article = parsedData.articles[i];
 		var actualId = article.id;
 		var actualTitle = article.titolo;
 
-		nodes.push(JSON.parse('{"id":' + actualTitle +', "label":' + actualId + '}'));
-		edges.push(JSON.parse('{"from":' + title ', "to": ' + actualTitle + ', "id": ' + edgeId + '}');
+		nodes.push(JSON.parse('{"id":"' + actualTitle +'", "label":"' + actualId + '"}'));
+		edges.push(JSON.parse('{"from":"' + title + '", "to": "' + actualTitle + '", "id": ' + edgeId + '}'));
 		var actualEdge = {};
 		actualEdge["keyword"] = article.keyword;
 		actualEdge["topic"] = article.topic;
