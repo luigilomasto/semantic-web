@@ -1,0 +1,11 @@
+papers {
+"A New Explanation of the Glitch Phenomenon" [label = "S"];
+"A Fixed Point Approach to Parallel Discrete Event Simulation" [label = "1"];
+"Addendum to Null Values in Nested Relational Databases" [label = "2"];
+"Approximating Queue Lengths Using the Maximum Entropy Principle" [label = "3"];
+"An Abstract Data Type for Name Analysis" [label = "4"];
+"A Fixed Point Approach to Parallel Discrete Event Simulation" -- "A New Explanation of the Glitch Phenomenon" [weight = 1];
+"A New Explanation of the Glitch Phenomenon" -- "Addendum to Null Values in Nested Relational Databases" [weight = 10];
+"A New Explanation of the Glitch Phenomenon" -- "An Abstract Data Type for Name Analysis" [weight = 1];
+"A New Explanation of the Glitch Phenomenon"-- "Approximating Queue Lengths Using the Maximum Entropy Principle" [weight = 5];
+}

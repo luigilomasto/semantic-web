@@ -1,0 +1,162 @@
+<html>
+<head>
+    <script type="text/javascript" src="script/vis.min.js"></script>
+    <script type="text/javascript" src="script/jquery.min.js"></script>
+    <link href="style/vis.min.css" rel="stylesheet" type="text/css"/>
+
+    <style type="text/css">
+        #container {
+            display: block;
+        }
+        #mynetwork {
+            width: 600px;
+            height: 400px;
+            border: 1px solid lightgray;
+            display: block;
+            margin: 32px;
+        }
+        #list-container {
+            vertical-align: top;
+            padding: 32px;
+        }
+        
+    </style>
+</head>
+<body>
+<form >
+    <input type="text" id="title"><br>
+    <button type = "button" id = "sub">SUBMIT QUERY</button>
+    </form>
+<button type = "button" id = "hier">Hierarchical Layout</button>
+<button type = "button" id = "graph">Graph Layout</button>
+<table id = "container">
+<tr>
+<td><div id="mynetwork"></div></td>
+<td id="list-container">
+    <ul>
+    
+    </ul>
+</td>
+</tr>
+</table>
+<p id="eventSpan"></p>
+<p id="edgeSpan"></p>
+
+<script type="text/javascript">  
+    
+$('#hier').click(function() {
+         var options = {
+                interaction:{hover:true},
+                layout: {
+                    randomSeed: undefined,
+                    improvedLayout:false,
+                    hierarchical: {
+                        enabled:true,
+                        levelSeparation: 150,
+                        direction: 'UD',   // UD, DU, LR, RL
+                        sortMethod: 'hubsize' // hubsize, directed
+                    }
+                }
+         }
+    network.setOptions(options);    
+});
+    
+$('#graph').click(function() {
+         var options = {
+                interaction:{hover:true},
+                layout: {
+                    randomSeed: undefined,
+                    improvedLayout:true,
+                    hierarchical: {
+                        enabled:false
+                    }
+                }
+         }
+    network.setOptions(options);    
+});
+    
+$('#sub').click(function() {
+    var author = document.getElementById("title").value;
+    $.ajax(
+        {
+            method:'post',
+            url:'php/submit_query.php',
+            data:
+            {
+                'title': title
+            },
+            success: function(data){
+                draw_graph(data);
+            }
+        });
+    function draw_graph(data) {
+        var parsedData = vis.network.convertDot(data);
+        
+        var data = {
+            nodes: parsedData.nodes,
+            edges: parsedData.edges
+        }
+        
+        $('#list-container ul').html('');
+        
+        for(var i = 0; i < data.nodes.length; i++) {
+            $('#list-container ul').append('<li> id: ' + data.nodes[i].label + ' title: ' + data.nodes[i].id);
+        }
+        
+        var options = parsedData.options;
+        
+        var custom_options = {
+            interaction:{hover:true},
+            layout: {
+                randomSeed: undefined,
+                improvedLayout:true,
+            },
+            nodes:{
+                shape:'circle'/*,
+                scaling: {
+                    min: 30,
+                    max: 30,
+                    label: {
+                        enabled: true,
+                        min: 10,
+                        max: 30,
+                        maxVisible: 10,
+                        drawThreshold: 5,
+                    },
+                    customScalingFunction: function (min,max,total,value) {
+                        if (max === min) {
+                            return 0.5;
+                        }
+                        else {
+                            var scale = 1 / (max - min);
+                            return Math.max(0,(value - min)*scale);
+                        }
+                    }
+                },*/
+            }
+        }   
+        
+        var container = document.getElementById('mynetwork');
+        
+        // create a network
+        network = new vis.Network(container, data, options);
+        network.setOptions(custom_options);
+        
+        network.on("hoverNode", function (params) {
+            params.event = "[original event]";
+            document.getElementById('eventSpan').innerHTML = '<h2>Node information:</h2>' + params["node"];
+        });
+        
+        network.on("hoverEdge", function (params) {
+            params.event = "[original event]";
+            document.getElementById('edgeSpan').innerHTML = '<h2>Edge information:</h2>' + params["edge"];
+        });
+        
+        network.on("click", function(params) {
+            console.log("Click: " + JSON.stringify(params, null, 4));
+        });
+    }
+});
+</script>
+</body>
+</html>
