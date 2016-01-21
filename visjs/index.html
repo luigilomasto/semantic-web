@@ -46,13 +46,6 @@
 
 <script type="text/javascript">  
 
-newNodes = []
-firstTime = true;
-nodes = [];
-edges = [];
-edgesMap = {};
-nodesMap = {};
-edgeId = 0;
 
     
 $('#hier').click(function() {
@@ -89,12 +82,20 @@ $('#graph').click(function() {
 $('#sub').click(function() {
     var layer = document.getElementById("layer").value;
     var title = document.getElementById("title").value;
+    newNodes = []
+    firstTime = true;
+    nodes = [];
+    edges = [];
+    edgesMap = {};
+    nodesMap = {};
+    edgeId = 0;
     if(firstTime){
 	    newNodes.push(title)
 	    firstTime = false;
     }
     for(var i = 0; i < layer;i++){
-	    for(var j = 0; j < newNodes.length; j++){
+	    var len = newNodes.length;
+	    for(var j = 0; j < len; j++){
 		    var d = newNodes[j];
 		    $.ajax(
 			{
