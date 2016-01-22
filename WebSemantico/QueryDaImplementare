@@ -1,0 +1,43 @@
+
+
+- Dato un articolo restituire journal,  anno
+
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  ?journal ?anno
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "On the Power of Chain Rules in Context Free Grammars".
+  ?doc sd:published_by ?journal.
+  ?prod crm:P4_has_time-span ?date.
+  ?date sd:Anno ?anno
+ 
+  
+}
+
+
+----------------------------------------------------------
+- Dato un articolo restituire autori.
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+Prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  ?author_name 
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "Representation of Graphs".
+  ?prod crm:P14_carried_out_by ?author.
+  ?author sd:name ?author_name
+}
+
+
+
+
