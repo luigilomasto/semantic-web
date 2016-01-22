@@ -173,13 +173,23 @@
 			var article = parsedData.articles[key];
 			var actualId = article.id;
 			var actualTitle = article.title;
-			
+			var relation="<b>Topics:</b><BR>";
 			var actualEdge = {};
 			var edgeValue = 0;
 			actualEdge["sourceTitle"] = title;
 			actualEdge["title"] = actualTitle;
 			actualEdge["keyword"] = article.keyword;
 			actualEdge["topic"] = article.topic;
+			
+			for(var key2 in article.topic ){
+				relation+=article.topic[key2]+"<BR>";
+			}
+			
+			relation += "<b>Keywords:</b><BR>";
+			
+			for(var key2 in article.keyword ){
+				relation+=key2+"<BR>";
+			}
 			
 			for (var oldEdge in edges){
 				if(edges[oldEdge].from == actualTitle || edges[oldEdge].to == actualTitle) {
@@ -191,10 +201,10 @@
 			    actualTitle = actualTitle.replace('"', ''); 
 				actualTitle = actualTitle.replace('"', ''); 
 				
-				var nodeToPush = JSON.parse('{"id":"' + actualTitle +'", "label":"' + id + '", "title":"' + actualTitle + '"}');
+				var nodeToPush = JSON.parse('{"id":"' + actualTitle +'", "label":"' + id + '", "title":"' + relation + '"}');
 				id++;
 				for (var oldNode in nodes) {
-						if(nodes[oldNode].title == actualTitle) {
+						if(nodes[oldNode].id == actualTitle) {
 							existFlag = true;
 							break;
 						}
