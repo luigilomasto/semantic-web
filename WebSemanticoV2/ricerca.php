@@ -1,6 +1,7 @@
 	<?php
 	require_once( 'http_API.php' );
 	require_once( 'query.php' );
+	error_reporting(E_ERROR | E_PARSE);
 	
 	class Article {
 	public   $id;
@@ -23,7 +24,7 @@
 	
 	$http= new http_API();
 	
-	$author = "John Darlington";
+	
 	$year = null;
 	$topics = array();
 	$article1 = array();
@@ -52,7 +53,7 @@
 	";
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//A PARTIRE DAL TITOLO RESTITUISCE TOPIC E KEYWORD
-	if(!isset($titile)){
+	if(!isset($title)){
 	$query=$prefixs.$sparql->getTopicByTitle($title,$tn="?topic_value");
 	$response = $http->sparqlQuery($query);
 	$json = json_decode($response,true);

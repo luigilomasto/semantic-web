@@ -142,7 +142,8 @@ function getArticlesByAuthors($authors){
 		WHERE
 		{   
   ?prod crm:P14_carried_out_by ?author.
-  ?author sd:name '".$authors."'.  ?prod crm:P108_has_produced ?doc.
+  ?author sd:name '".$authors."'.  
+  ?prod crm:P108_has_produced ?doc.
   ?doc crm:P102_has_title ?title.
   ?title sd:Title_value ?name_author
 }";
@@ -236,6 +237,49 @@ $query=$query."{?prod crm:P108_has_produced ?doc.
 return $query;
 }
 
+//DATO UN ARTICOLO RESTITUISCE journal e anno 
+function getJournalAndAnnoByArticle($titolo){
+$query=$query."SELECT  ?journal ?anno
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value '".$titolo."'.
+  ?doc sd:published_by ?journal.
+  ?prod crm:P4_has_time-span ?date.
+  ?date sd:Anno ?anno }";
 
+return $query;
+	
+}
+
+//DATO UN ARTICOLO RESTITUISCE autori
+function getAuthorByArticle($titolo){
+	
+	$query="SELECT  ?author_name 
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value '".$titolo."'.
+  ?prod crm:P14_carried_out_by ?author.
+  ?author sd:name ?author_name }";
+
+return $query;	
+	}
+	
+//DAL TITOLO RESTITUISCE L'URL
+function getUrlByTitle($titolo){
+	$query="SELECT ?url_value
+   WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value '".$titolo."'.
+  ?doc crm:P67_refers_to ?url.
+  ?url sd:Url_value ?url_value
+}";
+
+return $query;
+}
 }
 ?>

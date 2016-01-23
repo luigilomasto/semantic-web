@@ -159,12 +159,17 @@
 	   
 	    
 	    function generate_graph(data, title) {
-			
 		
-	    var parsedData = JSON.parse(data);
+		try {
+            var parsedData = JSON.parse(data);
+            }
+        catch(err) {
+             console.log(data);
+             }
+	    
 		//adding root if nodes is empty
 		if(nodes.length == 0){
-			nodes.push(JSON.parse('{"id":"' + title +'", "label": "s", "title":"' + title +'"}'));
+			nodes.push(JSON.parse('{"id":"' + title +'", "label": "s", "title":"Sorgente"}'));
 		}
 		for(var key in parsedData.articles){
 			
@@ -201,7 +206,7 @@
 			    actualTitle = actualTitle.replace('"', ''); 
 				actualTitle = actualTitle.replace('"', ''); 
 				
-				var nodeToPush = JSON.parse('{"id":"' + actualTitle +'", "label":"' + id + '", "title":"' + relation + '"}');
+				var nodeToPush = JSON.parse('{"id":"' + actualTitle +'", "label":"' + id + '"}');
 				id++;
 				for (var oldNode in nodes) {
 						if(nodes[oldNode].id == actualTitle) {
@@ -222,7 +227,7 @@
 				edgeValue +=parseFloat(article.keyword[currentValue]);
 			}
 			if(!existEdgeFlag){
-				edges.push(JSON.parse('{"from":"' + title + '", "to": "' + actualTitle + '", "id": ' + edgeId + ', "value":' + edgeValue + '}'));
+				edges.push(JSON.parse('{"from":"' + title + '", "to": "' + actualTitle + '", "id": ' + edgeId + ', "value":' + edgeValue + ', "title":"' + relation + '"}'));
 				edgesMap[edgeId] = actualEdge;
 				edgeId++
 			}
@@ -278,33 +283,119 @@
 	        // create a network
 	        network = new vis.Network(container, data, custom_options);
 	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        network.on('doubleClick',function (params){
+				 
+				 params.event = "[original click event]";
+				 q=params.nodes;
+				 
+				  $.ajax(
+				{
+				    method:'post',
+				    url:'urlArticolo.php',
+				    data:
+				    {
+					'title': q
+				    },
+				    success: function(data){
+					   
+					   
+					   
+						alert(data);
+							
+				    }, async: false
+				   
+				});
+				
+				 
+				});
+						
 	        network.on("hoverNode", function (params) {
 				
 	            params.event = "[original event]";
+	            t=params["node"];
+	            var toPrint='<h2>Node information</h2><b>TITLE: </b>'+params["node"]+"<br>";
 	            
-	            document.getElementById('eventSpan').innerHTML = '<h2>Node information:</h2>'+params["node"];
+	           
+	             $.ajax(
+				{
+				    method:'post',
+				    url:'datiArticolo.php',
+				    data:
+				    {
+					'title': t
+				    },
+				    success: function(data){
+					    var parsedInfo = JSON.parse(data);
+					    toPrint+="<b>JOURNAL: </b>";
+					    for(var key in parsedInfo.journal){
+							 toPrint+=parsedInfo.journal[key];
+							}
+						toPrint+="<br><b>AUTHORS: </b>";
+					    for(var key in parsedInfo.author){
+							 if(key==parsedInfo.author.length-1)
+							  toPrint+=parsedInfo.author[key];
+							  else
+							   toPrint+=parsedInfo.author[key]+", ";
+							}
+						toPrint+="<br><b>YEAR: </b>";
+					    for(var key in parsedInfo.data){
+							 toPrint+=parsedInfo.data[key];
+							}
+						toPrint+="<br><b>KEYWORDS: </b>";
+					    for(var key in parsedInfo.keyword){
+							
+							 if(key==parsedInfo.keyword.length-1)
+							  toPrint+=parsedInfo.keyword[key];
+							  else
+							   toPrint+=parsedInfo.keyword[key]+", ";
+							}
+						toPrint+="<br><b>TOPICS: </b>";
+					    for(var key in parsedInfo.topic){
+							
+							 if(key==parsedInfo.topic.length-1)
+							  toPrint+=parsedInfo.topic[key];
+							  else
+							   toPrint+=parsedInfo.topic[key]+", ";
+							}
+						toPrint+="<br><b>URL: </b>";
+						
+						var url="";
+						for(var key in parsedInfo.url){
+							   
+							   url+=parsedInfo.url[key];
+							  
+							}
+							toPrint+='<a href='+url+'>';
+							toPrint+=url;
+							toPrint+="</a>";  
+				    },async: false
+				});
+				document.getElementById('eventSpan').innerHTML = toPrint;
 	        });
 	        
 	        network.on("hoverEdge", function (params) {
 			    params.event = "[original event]";
-			    var informationArticle="<h2>Node information:</h2>";
-			    informationArticle+=edgesMap[params["edge"]].title+"<br>";
-				informationArticle+="<h2>Edge information:</h2>";
+			    var informationArticle="<h2>Edge information</h2>";
+			    informationArticle+="<b>Source:</b> "+edgesMap[params["edge"]].sourceTitle+" <br><b>Dest</b>: "+edgesMap[params["edge"]].title+"<br>";
 	            var somma=0;
-	           informationArticle+="<h3>Keywords</h3>"
 	           for(var indice in edgesMap[params["edge"]].keyword){
 				    somma+=parseFloat(edgesMap[params["edge"]].keyword[indice]);
-					informationArticle+=indice+" --- "+edgesMap[params["edge"]].keyword[indice]+"<br>";
+					//informationArticle+=indice+" --- "+edgesMap[params["edge"]].keyword[indice]+"<br>";
 				}
 				
 				if(edgesMap[params["edge"]].topic.length>0){
-				informationArticle+="<h3>Topic</h3>"
 				for(var indice2 in edgesMap[params["edge"]].topic){
 				    somma+=1;
-					informationArticle+=edgesMap[params["edge"]].topic[indice2]+"<br>";
+					//informationArticle+=edgesMap[params["edge"]].topic[indice2]+"<br>";
 					}
 				}
-				informationArticle+="<br><br>Somma relevance= "+somma;	
+				informationArticle+="<br><b>Somma relevance=</b> "+somma;	
 	            document.getElementById('eventSpan').innerHTML =informationArticle;
 	        });
 	        
