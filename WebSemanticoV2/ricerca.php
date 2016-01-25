@@ -53,15 +53,16 @@
 	";
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//A PARTIRE DAL TITOLO RESTITUISCE TOPIC E KEYWORD
-	if(!isset($title)){
+	//if(!isset($title)){
 	$query=$prefixs.$sparql->getTopicByTitle($title,$tn="?topic_value");
 	$response = $http->sparqlQuery($query);
 	$json = json_decode($response,true);
 	$temp= $json["results"]["bindings"];
 	foreach($temp as $t){
 		array_push($topics,$t["topic_value"]["value"]);
-	}
+	//}
 }
+
 	
 	if($control==1){//STAMPA I TOPIC DELL ARTICOLO DATO IN INPUT
 	echo"----------------------TOPIC----------------------<br>";

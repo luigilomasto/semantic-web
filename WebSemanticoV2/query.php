@@ -7,7 +7,19 @@ class query_sparql{
 		
 	}
 	
-	
+//QUERY CHE RESTITUISCE TUTTI I TITOLI
+function getTitle(){
+$query="
+SELECT ?titleValue WHERE{ 
+  ?prod crm:P108_has_produced ?doc. 
+  ?doc crm:P102_has_title ?title. 
+  ?title sd:Title_value ?titleValue. 
+ 	
+}";
+
+return $query;
+}
+
 /*PER PRENDERE I TOPIC DI UN ARTICOLO A PARTIRE DAL TITOLO*/
 function getTopicByTitle($title,$tn){
 
@@ -21,6 +33,7 @@ SELECT ".$tn."
   ?doc crm:P56_bears_feature ?topic.
   ?topic sd:Topic_value ".$tn."
 }";
+
 return $query;
 }
 
