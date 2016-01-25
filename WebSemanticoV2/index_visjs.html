@@ -90,25 +90,6 @@
 	</p>
 	<script type="text/javascript"> 
 		 
-	var titoli= new Array();
-	$.ajax(
-				{
-				    method:'post',
-				    url:'listaTitoli.php',
-				    data:
-				    {
-				    },
-				    success: function(data){
-					    titoli=JSON.parse(data);
-					    barraDiRicerca(titoli);
-				    },
-				     async: false
-				});
-	
-	function barraDiRicerca(titoli){
-		
-		
-		}
 	
 	
 	var id=1;
@@ -333,7 +314,7 @@
 	        
 	        
 	        
-	        network.on('doubleClick',function (params){
+	        /*network.on('doubleClick',function (params){
 				 
 				 params.event = "[original click event]";
 				 q=params.nodes;
@@ -359,7 +340,7 @@
 				});
 				
 				 
-				});
+				});*/
 						
 	        network.on("hoverNode", function (params) {
 				
