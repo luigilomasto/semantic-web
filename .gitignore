@@ -3,3 +3,9 @@ lib/API_key/
 lib/datasetWithKeyWord/
 lib/datasetWithAbstract/
 *~
+*.run.xml
+*.aux
+*.bcf
+*.log
+*.swp
+*.pdf

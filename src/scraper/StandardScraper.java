@@ -24,8 +24,6 @@ public class StandardScraper extends SuperScraper {
 		String URL2[]=URL[1].split("</ee>");
 		try{
 			Document page=returnPage(URL2[0]);
-
-			//Estrae l'abstract
 			Elements elemsAbstract = page.select("p.Para");
 			for(Element elem: elemsAbstract){
 				if(DEBUG)
@@ -35,9 +33,6 @@ public class StandardScraper extends SuperScraper {
 			}
 			if(GENERATE)
 				w.write("\n</abstract>\n");
-
-			//Estrae le keyword
-			//Elements elemsKeyWord = page.select("ul.abstract-about-subject > li > a");
 			Elements elemsKeyWord = page.select("ul.abstract-about-subject > li > a");
 			for(Element elem: elemsKeyWord){
 				if(DEBUG)
@@ -54,7 +49,7 @@ public class StandardScraper extends SuperScraper {
 		catch(SocketTimeoutException e){w.write("\n</abstract>\n"); failureConnect++;if(DEBUGException){System.out.print("Socket timeout "+URL2[0]+" ");System.out.println(failureConnect);}}
 		catch(UnknownHostException e){w.write("\n</abstract>\n"); failureConnect++;if(DEBUGException){System.out.print("dx.doi.org "+URL2[0]+" ");System.out.println(failureConnect);}}
 		catch(UnsupportedMimeTypeException e){w.write("\n</abstract>\n"); failureConnect++;if(DEBUGException){System.out.print("jsoup "+URL2[0]+" ");System.out.println(failureConnect);}}
-		
+
 	}
 
 }
