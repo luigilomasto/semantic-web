@@ -14,7 +14,7 @@ public class KeywordExtractor {
 
 	public static Document extractKeyword(String text, String api_path) throws IOException, XPathExpressionException, SAXException, ParserConfigurationException {
 		AlchemyAPI alchemyObj = AlchemyAPI.GetInstanceFromFile(api_path);
-        return alchemyObj.TextGetRankedKeywords(text);
+		return alchemyObj.TextGetRankedKeywords(text);
 	}
 
 }
