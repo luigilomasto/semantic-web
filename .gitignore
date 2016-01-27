@@ -9,3 +9,5 @@ lib/datasetWithAbstract/
 *.log
 *.swp
 *.pdf
+*.sh
+
