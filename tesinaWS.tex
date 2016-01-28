@@ -127,7 +127,8 @@ Tramite gli url, abbiamo estratto dalle pagine web gli abstract di ogni articolo
 	\item Abstract
 	\item Topics (se presenti)
 	\item Keyword (se presenti)
-	\item Dimentico qualcosa?
+	\item Rivista
+	\item URL
 \end{itemize} 
 Inoltre, attraverso l'utilizzo del estrattore di keywords AlchemyAPI, dagli abstract sono state estratte le parole chiave con relativa rilevanza all'interno dell'articolo. Queste keyword sono state aggiunte a quelle gi\'a esistenti.
 
@@ -138,7 +139,7 @@ In questa fase, \'e stata studiata la progettazione di un'ontologia adatta a ges
 	\item La possibilit\'a di interrogare il database di meta informazioni tramite query semantiche.
 	\item La possibilit\'a di collegare il lavoro a strumenti gi\'a esistenti per i \emph{linked data}, in modo da rendere lo strumento integrabile.
 \end{enumerate}
-Per l'ontologia, la nostra scelta \'e ricaduta su CIDOC/CRM\cite{CIDOC}. Il modello concettuale CIDOC/CRM \'e un stato progettato per la gestione di contenuti relativi alla storia ed alle opere d'arte, quindi si \'e rivelato adattissimo al nostro scopo. Non sono state necessarie aggiunte o estensioni alle classi gi\'a previste dal modello(Siamo sicuri?).
+Per l'ontologia, la nostra scelta \'e ricaduta su CIDOC/CRM\cite{CIDOC}. Il modello concettuale CIDOC/CRM \'e un stato progettato per la gestione di contenuti relativi alla storia ed alle opere d'arte, quindi si \'e rivelato adatto al nostro scopo. Non sono state necessarie aggiunte o estensioni alle classi gi\'a previste dal modello(Siamo sicuri?).
 
 -----------Qui c\'e da appronfondire sullo schema che abbiamo progettato noi a partire dalle meta informazioni-----
 
@@ -153,7 +154,7 @@ Una volta popolata l'ontologia \'e stata necessaria la progettazioni di query ad
 \subsection{Presentazione dei risultati}
 \label{subsec:results}
 
-Una volta progettate ed eseguite le query, abbiamo studiato come proporre i risultati in una maniera elegante, ma che allo stesso tempo ponesse enfasi sullo strato semantico che lega i documenti. Per fare ci\'o, abbiamo generato in maniera ricorsiva un albero: inizialmente la radice \'e il documento di partenza, ed il solo nodo presente nell'albero. Il livello $i+1$-esimo dell'albero viene generato semplicemente lanciando la query principale su tutti gli articoli del livello $i$-esimo. Il processo viene reiterato finch\'e non si arriva alla profondit\'a desiderata.
+Una volta progettate ed eseguite le query, abbiamo studiato come proporre i risultati in una maniera elegante, ma che allo stesso tempo ponesse enfasi sullo strato semantico che lega i documenti. Per fare ci\'o, abbiamo generato in maniera ricorsiva un albero: la radice \'e il documento di partenza, ed il solo nodo presente nell'albero. Il livello $i+1$-esimo dell'albero viene generato semplicemente lanciando la query principale su tutti gli articoli del livello $i$-esimo. Il processo viene reiterato finch\'e non si arriva alla profondit\'a desiderata.
 
 \section{Strumenti utilizzati}
 \label{sec:tools}
