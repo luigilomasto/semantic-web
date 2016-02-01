@@ -4,52 +4,94 @@
 	    <script type="text/javascript" src="jquery.min.js"></script>
 	    <link href="vis.min.css" rel="stylesheet" type="text/css"/>
 	    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-        <title>Input Autocomplete Suggestions Demo</title>
-        <link rel="shortcut icon" href="http://designshack.net/favicon.ico">
-        <link rel="icon" href="http://designshack.net/favicon.ico">
+        <title>Scientific Articles</title>
         <link rel="stylesheet" type="text/css" media="all" href="style.css">
         <script type="text/javascript" src="jQuery.js"></script>
         <script type="text/javascript" src="autocomplete.min.js"></script>
         <script type="text/javascript" src="autocomplete.js"></script>
+		
+		<!-- Bootstrap -->
+		<link href="bootstrap-3.3.6-dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+		<link href="css/navbar.css" rel="stylesheet">
+		
+		
 	    <style type="text/css">
 	        #container {
 	            display: block;
+				position: relative;
+				width: 100%;
+				height: 480px;
 	        }
-	        #mynetwork {
-				
-	            width: 400px;
+	        #networkContainer {
+				right: 0px;
+				top: 0px;
+	            width: 65%;
 	            height: 400px;
-	            border: 1px solid lightgray;
-	            display: block;
-	            margin: 32px;
+				display: block;
+				position: absolute;
 	        }
-	        #list-container {
+			#mynetwork{
+				position: relative;
+				width: 100%;
+				height: 100%;
+			}
+	        #infoContainer {
 	            vertical-align: top;
-	            padding: 32px;
-	        }
-	        
-			        
-			       fieldset { border:1px; solid green; position:relative;}
+				height: 400px;
+				left: 0px;
+				top: 0px;
+				width: 35%;
+				text-align: left;
+				position: absolute;
+	            display: block;
+				overflow-y: scroll;
+				overflow-x: none;
+				font-size: smaller;
+        }
+		#resultCheckbox{
+			position: absolute;
+			display: block;
+			top: 480px;
+			right: 0px;
+			left: 0px;
+
+			
 		
-		           legend {
-		           padding: 0.2em 0.5em;
-		           border:1px solid green;
-		           color:green;
-		           font-size:90%;
-		           text-align:right;
-		           }
-		           #info{
-					   position:relative;
-					   right:0;
-					   top:50;
-					   }
-		           #result{
-					   
-					   position:relative;
-					   top:50;
-					   left:50;
-					   right:50;
-					   }
+		}
+		#result > .topic{
+			font-size: medium;
+			margin: 2px;
+			display: inline-block;
+			float: left;
+		}
+		
+		#buttonContainer{
+			text-align: center;
+	
+		}
+		
+		.checkboxContainer > span{
+		margin-top: 10px; 
+		margin-right: 15px; 
+		margin-bottom: 10px;
+		margin-left: 20px; 
+		}
+	        
+		.checkboxContainer{
+				width: 20%;
+				height: 20%;
+				display: inline-block;
+				margin-right: 5px;
+	}		
+	#mainContainer{
+			width: 100%;
+	}
+	#clear{
+	clear: both;
+	}
+			      
+		        		
 	        
 	    </style>
 	</head>
@@ -58,7 +100,13 @@
       <h1>Scientific Articles</h1>
       
       <div id="searchfield">
-        <form><input type="text" name="currency" class="biginput" id="autocomplete"></form>
+        <form><input type="text" name="currency" class="biginput" id="autocomplete">
+	
+		
+	    <input style="margin-left: 20px; margin-right: 20px" type="number" id="layer" value="1">
+	
+			<button type = "button" id = "sub" class="btn btn-default">SUBMIT QUERY</button>
+	    </form>
       </div><!-- @end #searchfield -->
       
        <div id="outputbox">
@@ -66,50 +114,31 @@
        </div>
          </div><!-- @end #content -->
       </div><!-- @end #w -->
-	<form> 
 	
-	    <input type="number" id="layer" value="1"><br>
+
+	<div id = "container">
+	<div id="infoContainer">
+		
+		<p id="info">
+			<p id="eventSpan"></p>
+			<p id="edgeSpan"></p>
+		</p>
 	
-	    <button type = "button" id = "sub">SUBMIT QUERY</button>
-	    </form>
-	<button type = "button" id = "hier">Hierarchical Layout</button>
-	<button type = "button" id = "graph">Graph Layout</button>
-	<table id = "container">
-	<tr>
-	<td><div id="mynetwork"></div></td>
-	<td id="list-container">
-	    <ul>
-	    
-	    </ul>
-	</td>
-	</tr>
-	</table>
-	<p id="info">
-	<p id="eventSpan"></p>
-	<p id="edgeSpan"></p>
-	</p>
+	</div>
+	<div id="networkContainer">
+		<div id="mynetwork"></div>
+		
+	</div>
+	
+	<div id="resultCheckbox">
+
+		<span id="result"></span>
+	
+	
 	<script type="text/javascript"> 
 		 
-	var titoli= new Array();
-	$.ajax(
-				{
-				    method:'post',
-				    url:'listaTitoli.php',
-				    data:
-				    {
-				    },
-				    success: function(data){
-					    titoli=JSON.parse(data);
-					    barraDiRicerca(titoli);
-				    },
-				     async: false
-				});
-	
-	function barraDiRicerca(titoli){
-		
-		
-		}
-	
+	var color= new Array();
+	color=["#ffff80", "#ff9933", "#ff4d4d","#0099ff"];	
 	
 	var id=1;
 	var topicsCheckbox=new Array();
@@ -151,6 +180,7 @@
 		id=1;
 	    var layer = document.getElementById("layer").value;
 	    var title = document.getElementById("autocomplete").value;
+		
 	    newNodes = [];
 	    newNodesNextLevel = [];
 	    nodes = [];
@@ -177,7 +207,7 @@
 				
 			    var d = newNodes[0];
 			    newNodes.splice(0,1);
-			   
+		
 			    $.ajax(
 				{
 				    method:'post',
@@ -187,7 +217,7 @@
 					'title': d
 				    },
 				    success: function(data){
-					    generate_graph(data, d );
+					    generate_graph(data, d, i);
 					    extractKeywordsAndTopics(data);
 				    },
 				     async: false
@@ -201,7 +231,7 @@
 	    
 	   
 	    
-	    function generate_graph(data, title) {
+	    function generate_graph(data, title, layer) {
 		
 		try {
             var parsedData = JSON.parse(data);
@@ -212,7 +242,7 @@
 	    
 		//adding root if nodes is empty
 		if(nodes.length == 0){
-			nodes.push(JSON.parse('{"id":"' + title +'", "label": "s", "title":"Sorgente"}'));
+			nodes.push(JSON.parse('{"id":"' + title +'", "label": "s", "title":"Sorgente", "color": "' + color[0] + '"}'));
 		}
 		for(var key in parsedData.articles){
 			
@@ -224,6 +254,7 @@
 			var relation="<b>Topics:</b><BR>";
 			var actualEdge = {};
 			var edgeValue = 0;
+			var sumOfRelevance = 0;
 			actualEdge["sourceTitle"] = title;
 			actualEdge["title"] = actualTitle;
 			actualEdge["keyword"] = article.keyword;
@@ -237,10 +268,11 @@
 			
 			for(var key2 in article.keyword ){
 				relation+=key2+"<BR>";
+				sumOfRelevance +=parseFloat(article.keyword[key2]);
 			}
 			
 			for (var oldEdge in edges){
-				if(edges[oldEdge].from == actualTitle || edges[oldEdge].to == actualTitle) {
+				if((edges[oldEdge].from == actualTitle && edges[oldEdge].to == title) || (edges[oldEdge].from == title && edges[oldEdge].to == actualTitle))  {
 					existEdgeFlag = true;
 					break;
 				}
@@ -249,17 +281,18 @@
 			    actualTitle = actualTitle.replace('"', ''); 
 				actualTitle = actualTitle.replace('"', ''); 
 				
-				var nodeToPush = JSON.parse('{"id":"' + actualTitle +'", "label":"' + id + '"}');
-				id++;
+				var nodeToPush = JSON.parse('{"id":"' + actualTitle +'", "label":"' + id + '", "color":"' + color[layer] + '"}');
+				
 				for (var oldNode in nodes) {
 						if(nodes[oldNode].id == actualTitle) {
 							existFlag = true;
 							break;
 						}
 				}
-				if(!existFlag) {
+				if(!existFlag && sumOfRelevance>0) {
 					nodes.push(nodeToPush);
 				    newNodesNextLevel.push(actualTitle);	
+				    id++;
 					existFlag = false;
 				}
 			}
@@ -269,9 +302,8 @@
 			for(var currentValue in article.keyword) {
 				edgeValue +=parseFloat(article.keyword[currentValue]);
 			}
-			if(!existEdgeFlag){
-				edges.push(JSON.parse('{"from":"' + title + '", "to": "' + actualTitle + '", "id": ' + edgeId + ', "value":' + edgeValue + ', "title":"' + relation + '"}'));
-				edgesMap[edgeId] = actualEdge;
+			if(!existEdgeFlag && edgeValue>0){
+				edges.push(JSON.parse('{"from":"' + title + '", "to": "' + actualTitle + '", "id": ' + edgeId + ', "value":' + edgeValue + ', "title":"' + relation + '", "color":"' + color[layer] + '"}'));				edgesMap[edgeId] = actualEdge;
 				edgeId++
 			}
 		}
@@ -335,7 +367,7 @@
 	        
 	        network.on('doubleClick',function (params){
 				 
-				 params.event = "[original click event]";
+				/* params.event = "[original click event]";
 				 q=params.nodes;
 				 
 				  $.ajax(
@@ -357,14 +389,15 @@
 				    }, async: false
 				   
 				});
-				
-				 
+				 */
+				 window.location.href = document.getElementById("url").href;
 				});
 						
 	        network.on("hoverNode", function (params) {
 				
 	            params.event = "[original event]";
 	            t=params["node"];
+	            var toPrint='<h2>Node information</h2><b>TITLE: </b>'+params["node"]+"<br>";
 	            var toPrint='<h2>Node information</h2><b>TITLE: </b>'+params["node"]+"<br>";
 	            
 	           
@@ -409,7 +442,7 @@
 							  else
 							   toPrint+=parsedInfo.topic[key]+", ";
 							}
-						toPrint+="<br><b>URL: </b>";
+						
 						
 						var url="";
 						for(var key in parsedInfo.url){
@@ -417,7 +450,7 @@
 							   url+=parsedInfo.url[key];
 							  
 							}
-							toPrint+='<a href='+url+'>';
+							toPrint+='<a style="display:none" id ="url" href='+url+'>';
 							toPrint+=url;
 							toPrint+="</a>";  
 				    },async: false
@@ -445,9 +478,9 @@
 	            document.getElementById('eventSpan').innerHTML =informationArticle;
 	        });
 	        
-	        network.on("click", function(params) {
+	        /*network.on("click", function(params) {
 	            console.log("Click: " + JSON.stringify(params, null, 4));
-	        });
+	        });*/
 	    }
 	    
 	    function extractKeywordsAndTopics(data){
@@ -463,30 +496,46 @@
 			  keywordsCheckbox= keywordsCheckbox.concat(obj.keywords);
 			  articlesCheckbox=articlesCheckbox.concat(obj.article);
 			  keywordsCheckbox=unique(keywordsCheckbox);
-			  
-			  var toStamp="";
+			  var nbox=1;
+			  var checkNumber=1;
+			  var toStamp="<div id='mainContainer'><div id=\""+nbox+"\" class='checkboxContainer'><ul class=\"grid\">";
 			
 			           
 			            if(typeof topicsCheckbox !== "undefined"){
-			                toStamp+="<fieldset><legend>Topics</legend><br>";
-			            
+			                //toStamp+="<fieldset><legend>Topics</legend><br>";
+							if(topicsCheckbox.length > 0)
+								toStamp+="<li><h3>Topics</h3></li>";
 			            for(var indice in topicsCheckbox){
 			               
-			                toStamp+="<input type='checkbox' class='topic' id='"+topicsCheckbox[indice]+"' value='"+topicsCheckbox[indice]+"' /"+">"+topicsCheckbox[indice]+"<br>"; 
-			
+			                toStamp+="<li><span class=\"topic\"><input type='checkbox' class='topic' id='"+topicsCheckbox[indice]+"' value='"+topicsCheckbox[indice]+"' /"+">"+topicsCheckbox[indice]+"</span></li>"; 
+							checkNumber++;
+							
+							if(checkNumber==3){
+								nbox++;
+								toStamp+="</ul></div><div id=\""+nbox+"\" class='checkboxContainer'><ul class=\"grid\">";
+								checkNumber=1;
+								}
 			                }
-			               toStamp+="</fieldset> <br>";
+			               //toStamp+="</fieldset> <br>";
 			               }
-			                
-			
-			             toStamp+="<fieldset><legend>Keywords</legend><br>"; 
-			
+			            nbox++;
+						checkNumber=1;
+						
+						toStamp+="</ul></div><div id='clear'></div> <div id=\""+nbox+"\" class='checkboxContainer'><ul class=\"grid\">";
+			             //toStamp+="<fieldset><legend>Keywords</legend><br>"; 
+						 toStamp+="<li><h3>Keywords</h3></li>";
 			            for(var indice in keywordsCheckbox){
 			               
-			                toStamp+="<input type='checkbox' class='keyword' id='"+keywordsCheckbox[indice]+"' value='"+keywordsCheckbox[indice]+"' /"+">"+keywordsCheckbox[indice]+"<br>"; 
-			
+			                toStamp+="<li><span class=\"topic\"><input type='checkbox' class='keyword' id='"+keywordsCheckbox[indice]+"' value='"+keywordsCheckbox[indice]+"' /"+">"+keywordsCheckbox[indice]+"</span></li>"; 
+							checkNumber++;
+							if(checkNumber==6){
+								nbox++;
+								toStamp+="</ul></div><div id=\""+nbox+"\" class='checkboxContainer'><ul class=\"grid\">";
+								checkNumber=1;
+								}
 			               }
-			               toStamp+="</fieldset> <br><button  onclick='restringiGrafo()'>Restringi Ricerca</button><button  onclick='returnGraph()'>Grafo di partenza</button>";
+						   //toStamp+=</fieldset>;
+			               toStamp+="</ul></div></div><div id=\"buttonContainer\"> <button  class=\"btn btn-default\"  onclick='restringiGrafo()'>Restringi Ricerca</button><button   class=\"btn btn-default\" onclick='returnGraph()'>Grafo di partenza</button></div></div>";
 			                document.getElementById("result").innerHTML = toStamp;  
 			           
 			    }
@@ -617,7 +666,6 @@
 			
 	</script>
 	
-	<span id="result"></span>
 	</body>
 	</html>
 	
