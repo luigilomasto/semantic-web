@@ -104,13 +104,13 @@
 }
 \begin{document}
 \title{Finding similar papers using ontologies}
-\author{Marco Mecchia, Andrea Sold\'a, Luigi Lomasto, Francesco Gaetano}
+\author{Francesco Gaetano, Luigi Lomasto, Marco Mecchia, Andrea Sold\'a }
 \date{Gennaio 2016}
 \maketitle
 \section{Introduzione al problema}
 Il problema di trovare lavori scientifici simili scritti in linguaggio naturale \'e un compito molto difficile dal punto di vista informatico: Tali documenti infatti non hanno una struttura fissa, e sono pieni  di elementi non facilmente confrontabili come formule, notazioni ed immagini. Inoltre, nonostante una netta predominanza dell'inglese, i documenti sono scritti in lingue diverse. Tutte queste caratteristiche, insite in lavori di ricerca di questo tipo, rendono gli approcci basati sul confronto testuale non utilizzabili. Il nostro lavoro, basato sulle meta informazioni dei documenti e sull'utilizzo di tecnologie del Semantic Web, mira a fornire un approccio alternativo ai metodi tradizionali, nonch\'e un'infrastruttura riutilizzabile anche in altri ambiti.
 
-Il resto del lavoro \'e organizzato come segue: nella sezione \ref{sec:workflow} viene presentata l'analisi da noi condotta ed i vari step che hanno portato al risultato finale. Nella sezione \ref{sec:tools} vengono analizzati nel dettaglio le tecnologie del Web Semantico da noi utilizzate. Nella sezione \ref{sec:implementation} vengono presentati nel dettaglio i vari componenti introdotti nella sezione \ref{sec:workflow}, presentando e commentando estratti di codice del progetto. Infine, nella sezione \ref{sec:conclusions} verranno commentati i risultati ottenuti ed eventuali applicazioni ed estensioni di quanto fatto.
+Il resto del lavoro \'e organizzato come segue: nella sezione \ref{sec:workflow} viene presentata l'analisi da noi condotta ed i vari step che hanno portato al risultato finale. Nella sezione \ref{sec:tools} vengono analizzati nel dettaglio le tecnologie del Web Semantico da noi utilizzate. Nella sezione \ref{sec:implementation} vengono presentate nel dettaglio le varie componenti introdotte nella sezione \ref{sec:workflow}, illustrando e commentando estratti di codice del progetto. Infine, nella sezione \ref{sec:conclusions} verranno commentati i risultati ottenuti ed eventuali applicazioni ed estensioni di quanto fatto.
 
 \section{Workflow}
 \label{sec:workflow}
@@ -118,7 +118,7 @@ Il lavoro \'e stato suddiviso in diverse fasi.
 
 \subsection{Selezione del database ed estrazione delle meta-informazioni}
 \label{subsec:infoextraction}
-In questa fase preliminare del lavoro, abbiamo costruito il dataset sul quale basarci per tutto il resto del lavoro. Per prima cosa abbiamo scelto il database dalla quale attingere i lavori da confrontare. La nostra scelta e' ricaduta su DBLP\cite{DBLP} in quanto punto di riferimento centrale per la sottomissione dei paper nella comunita' informatica. DBLP inoltre mette a disposizione ampi dataset di meta-informazioni sugli articoli scaricabili in formato standard xml, con relativi url alle pagine web degli articoli.
+In questa fase preliminare del lavoro, abbiamo costruito il dataset sul quale basarci per tutto il resto del lavoro. Per prima cosa abbiamo scelto il database dal quale attingere i lavori da confrontare. La nostra scelta e' ricaduta su DBLP\cite{DBLP} in quanto punto di riferimento centrale per la sottomissione dei paper nella comunita' informatica. DBLP inoltre mette a disposizione ampi dataset di meta-informazioni sugli articoli scaricabili in formato standard xml, con relativi url alle pagine web degli articoli.
 Tramite gli url, abbiamo estratto dalle pagine web gli abstract di ogni articolo tramite \emph{scraping}. Nel nostro dataset finale, ogni articolo ha quindi i seguenti campi:
 \begin{itemize}
 	\item Titolo del lavoro
@@ -139,22 +139,32 @@ In questa fase, \'e stata studiata la progettazione di un'ontologia adatta a ges
 	\item La possibilit\'a di interrogare il database di meta informazioni tramite query semantiche.
 	\item La possibilit\'a di collegare il lavoro a strumenti gi\'a esistenti per i \emph{linked data}, in modo da rendere lo strumento integrabile.
 \end{enumerate}
-Per l'ontologia, la nostra scelta \'e ricaduta su CIDOC/CRM\cite{CIDOC}. Il modello concettuale CIDOC/CRM \'e un stato progettato per la gestione di contenuti relativi alla storia ed alle opere d'arte, quindi si \'e rivelato adatto al nostro scopo. Non sono state necessarie aggiunte o estensioni alle classi gi\'a previste dal modello(Siamo sicuri?).
+Per l'ontologia, la nostra scelta \'e ricaduta su CIDOC/CRM\cite{CIDOC}. Il modello concettuale CIDOC/CRM \'e un stato progettato per la gestione di contenuti relativi alla storia ed alle opere d'arte, quindi si \'e rivelato adatto al nostro scopo. 
+Per definizione, un'onotologia \'e CRM compatibile se rispetta lo schema di base (illustrato in seguito) proposto dagli autori.
+Per rappresentare in modo corretto le informazioni estratte da DBLP \'e stato necessario aggiungere, allo schema di base del CRM, altre classi e propriet\'a.  \newline
 
------------Qui c\'e da appronfondire sullo schema che abbiamo progettato noi a partire dalle meta informazioni-----
+\begin{figure}
+\centering
+\includegraphics[scale=1.50]{immaginiTesina/ridotto.jpg}
+\end{figure}
+
+
+
+-----------Qui c\'e da appronfondire sullo schema che abbiamo progettato noi a partire dalle meta informazioni Francesco-----
 
 \subsection{Interrogazione dell'ontologia}
 \label{subsec:query}
 Una volta popolata l'ontologia \'e stata necessaria la progettazioni di query adatte al contesto del progetto. Le query su cui \'e stata dedicata maggiore attenzione sono due:
 \begin{enumerate}
-	\item Dato il nome di un articolo, restituire tutti gli articoli correlati per keyword e topic all'articolo di partenza. ---more info here by Luigi---
-	\item Dato un nome parziale, restituire tutti i nomi degli articoli contenenti quel nome parziale. Questa query \'e stata progettata in seguito alla realizzazione del front-end, per fornire suggerimenti automatici durante la ricerca di un articolo.
+	\item A partire dal titolo di un articolo, restituire  keywords e topics.
+	\item A partire da keywords e topic ottenuti dalla query precedente, restituire la lista degli articoli che hanno un'sottoinsieme di keywords e topics in comune. 
+	\item A partire dal titolo di un articolo, restituire tutte le informazioni quali: Autori, anno di pubblicazione, rivista, url ...
 \end{enumerate}
 
 \subsection{Presentazione dei risultati}
 \label{subsec:results}
 
-Una volta progettate ed eseguite le query, abbiamo studiato come proporre i risultati in una maniera elegante, ma che allo stesso tempo ponesse enfasi sullo strato semantico che lega i documenti. Per fare ci\'o, abbiamo generato in maniera ricorsiva un albero: la radice \'e il documento di partenza, ed il solo nodo presente nell'albero. Il livello $i+1$-esimo dell'albero viene generato semplicemente lanciando la query principale su tutti gli articoli del livello $i$-esimo. Il processo viene reiterato finch\'e non si arriva alla profondit\'a desiderata.
+Una volta progettate ed eseguite le query, abbiamo studiato come proporre i risultati in modo elegante, ma che allo stesso tempo ponesse enfasi sullo strato semantico che lega i documenti. Per fare ci\'o, abbiamo generato in maniera ricorsiva un grafo centralizzato: la radice \'e il documento di partenza, ed il solo nodo presente nel grafo. Il livello $i+1$-esimo del grafo viene generato semplicemente lanciando la query principale su tutti gli articoli del livello $i$-esimo. Il processo viene reiterato finch\'e non si arriva alla profondit\'a desiderata.
 
 \section{Strumenti utilizzati}
 \label{sec:tools}
@@ -170,7 +180,7 @@ Le tecnologie utilizzate per lo sviluppo di questo progetto sono molteplici:
 	\begin{itemize}
 		\item Protege per creare ed estendere lo schema ontologico.
 		\item OWL come linguaggio per definire l'ontologia.
-		\item SPARQL come linguaggio di query per l'ontologia.
+		\item SPARQL come linguaggio di query per interrogare l'ontologia.
 		\item Apache Fuseki come server per gestire le query.
 	\end{itemize}
 	\item PHP7 per la formulazione e la sottomissione delle query lato server.
@@ -181,6 +191,28 @@ Le tecnologie utilizzate per lo sviluppo di questo progetto sono molteplici:
 		\item Bootstrap per la gestione dell'aspetto della pagina.
 	\end{itemize}
 \end{itemize}
+
+\subsection{Jsoup}
+Libreria Java che permette di lavorare con documenti HTML. Fornisce delle API molto semplici con le quali \'e possibile estrarre e manipolare i dati a partire dal DOM di una pagina mediante l'uso di espressioni XPath. 
+\newline \newline 
+\textbf  {Esempio}
+\begin{lstlisting}
+Document doc = Jsoup.connect(URL).timeout(50*1000).get();
+Elements elemsAbstract = doc.select("p.Para");
+\end{lstlisting} 
+
+\subsection{Apache Jena}
+Francesco
+
+\subsection{AlchemyAPI}
+AlchemyAPI utilizza algoritmi per  l'apprendimento automatico che permettono di  estrarre meta-dati semantici dal contenuto desiderato, come ad esempio informazioni su persone, luoghi, aziende, gli argomenti, i fatti, le relazioni, gli autori e le lingue.I meta-dati possono essere restituiti in formato XML, JSON e RDF. \newline
+Ad ogni parola estratta viene associato una relevance (valore numerico compreso tra 0 e 1), che indica l'incidenza della parola all'interno del testo.
+Nel nostro caso sono state usate parole con relevance maggiore o uguale di 0.6. 
+
+
+
+ 
+
 
 ---------------Qui possiamo inserire sottosezioni con la pala se vogliamo descrivere nel dettaglio alcune delle tecnologie utilizzate---------
 
