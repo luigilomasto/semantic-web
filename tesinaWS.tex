@@ -1,5 +1,5 @@
-\documentclass[11pt,twoside,a4paper]{article}
-
+%\documentclass[11pt,twoside,a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 \usepackage[italian]{babel}
 \usepackage{listings}
 \usepackage{color}
@@ -119,18 +119,19 @@ Il lavoro \'e stato suddiviso in diverse fasi.
 \subsection{Selezione del database ed estrazione delle meta-informazioni}
 \label{subsec:infoextraction}
 In questa fase preliminare del lavoro, abbiamo costruito il dataset sul quale basarci per tutto il resto del lavoro. Per prima cosa abbiamo scelto il database dal quale attingere i lavori da confrontare. La nostra scelta e' ricaduta su DBLP\cite{DBLP} in quanto punto di riferimento centrale per la sottomissione dei paper nella comunita' informatica. DBLP inoltre mette a disposizione ampi dataset di meta-informazioni sugli articoli scaricabili in formato standard xml, con relativi url alle pagine web degli articoli.
-Tramite gli url, abbiamo estratto dalle pagine web gli abstract di ogni articolo tramite \emph{scraping}. Nel nostro dataset finale, ogni articolo ha quindi i seguenti campi:
+Mediante gli url letti dal file dblp.xml, per ogni articolo abbiamo estratto dalla pagina sorgente l'abstract ed eventualmente topics e keywords (se presenti). Questo lavoro ci ha permesso di ottenere un primo dataset che, oltre alle informazioni di partenza, contiene anche gli abstract con eventuali topics o keywords. Poich\'e topics e keywords sono state estratte dalla pagina sorgente dell'articolo, \'e stato deciso di assegnare, per ogni topic una relevance pari ad 1, e per ogni keyword una relevance pari a 0.99.\newline \newline
+A partire da questa prima versione, con l'utilizzo delle API di Alchemy abbiamo, per ogni abstract, estratto le keywords con le rispettive relevance, ottenendo cos\'i il dataset finale, sostituendo all'abstract le keywords ottenute. Il dataset finale contiene per ogni articolo le seguenti informazioni:
+
 \begin{itemize}
 	\item Titolo del lavoro
 	\item Autori del lavoro
 	\item Anno di pubblicazione
-	\item Abstract
 	\item Topics (se presenti)
 	\item Keyword (se presenti)
 	\item Rivista
 	\item URL
 \end{itemize} 
-Inoltre, attraverso l'utilizzo del estrattore di keywords AlchemyAPI, dagli abstract sono state estratte le parole chiave con relativa rilevanza all'interno dell'articolo. Queste keyword sono state aggiunte a quelle gi\'a esistenti.
+
 
 \subsection{Progettazione e popolamento dell'ontologia}
 \label{subsec:ontology}
@@ -140,13 +141,7 @@ In questa fase, \'e stata studiata la progettazione di un'ontologia adatta a ges
 	\item La possibilit\'a di collegare il lavoro a strumenti gi\'a esistenti per i \emph{linked data}, in modo da rendere lo strumento integrabile.
 \end{enumerate}
 Per l'ontologia, la nostra scelta \'e ricaduta su CIDOC/CRM\cite{CIDOC}. Il modello concettuale CIDOC/CRM \'e un stato progettato per la gestione di contenuti relativi alla storia ed alle opere d'arte, quindi si \'e rivelato adatto al nostro scopo. 
-Per definizione, un'onotologia \'e CRM compatibile se rispetta lo schema di base (illustrato in seguito) proposto dagli autori.
-Per rappresentare in modo corretto le informazioni estratte da DBLP \'e stato necessario aggiungere, allo schema di base del CRM, altre classi e propriet\'a.  \newline
 
-\begin{figure}
-\centering
-\includegraphics[scale=1.50]{immaginiTesina/ridotto.jpg}
-\end{figure}
 
 
 
@@ -164,7 +159,7 @@ Una volta popolata l'ontologia \'e stata necessaria la progettazioni di query ad
 \subsection{Presentazione dei risultati}
 \label{subsec:results}
 
-Una volta progettate ed eseguite le query, abbiamo studiato come proporre i risultati in modo elegante, ma che allo stesso tempo ponesse enfasi sullo strato semantico che lega i documenti. Per fare ci\'o, abbiamo generato in maniera ricorsiva un grafo centralizzato: la radice \'e il documento di partenza, ed il solo nodo presente nel grafo. Il livello $i+1$-esimo del grafo viene generato semplicemente lanciando la query principale su tutti gli articoli del livello $i$-esimo. Il processo viene reiterato finch\'e non si arriva alla profondit\'a desiderata.
+Una volta progettate ed eseguite le query, abbiamo studiato un modo per poter proporre i risultati in modo elegante, ma che allo stesso tempo ponesse enfasi sullo strato semantico che lega i documenti. Per fare ci\'o, abbiamo generato in maniera ricorsiva un grafo centralizzato: la radice \'e il documento di partenza, ed il solo nodo presente nel grafo. Il livello $i+1$-esimo del grafo viene generato semplicemente lanciando la query principale su tutti gli articoli del livello $i$-esimo. Il processo viene reiterato finch\'e non si arriva alla profondit\'a desiderata.
 
 \section{Strumenti utilizzati}
 \label{sec:tools}
@@ -201,20 +196,81 @@ Document doc = Jsoup.connect(URL).timeout(50*1000).get();
 Elements elemsAbstract = doc.select("p.Para");
 \end{lstlisting} 
 
+\subsection{Prot\'eg\'e}
+Prot\'eg\'e \'e un framework open source sviluppato presso l'universit\'a di Stanford, esso dispone di un'interfaccia grafica per la definizione di schemi ontologici e della semantica alla base di essi. Tramite il tool \'e stato possibile importare lo schema ontologico tipico di CIDOC-CRM sulla quale successivamente si \'e reso necessario la definizione di classi e proprietà supplementari per estendere lo schema in uno maggiormente adatto per la nostra applicazione.
+
 \subsection{Apache Jena}
-Francesco
+Apache Jena è un framework open source per Java, il quale fornisce API per la lettura e scrittura di grafi RDF. In particolare, \'e stato utilizzato per la lettura dello schema precedentemente realizzato con Prot\'eg\'e e per la successiva scrittura di uno schema OWL comprendente le istanze a partire da un dataset in input.
 
 \subsection{AlchemyAPI}
-AlchemyAPI utilizza algoritmi per  l'apprendimento automatico che permettono di  estrarre meta-dati semantici dal contenuto desiderato, come ad esempio informazioni su persone, luoghi, aziende, gli argomenti, i fatti, le relazioni, gli autori e le lingue.I meta-dati possono essere restituiti in formato XML, JSON e RDF. \newline
+AlchemyAPI utilizza algoritmi per  l'apprendimento automatico che permettono di  estrarre meta-dati semantici dal contenuto desiderato, come ad esempio informazioni su persone, luoghi, aziende, gli argomenti, i fatti, le relazioni, gli autori e le lingue. I meta-dati possono essere restituiti in formato XML, JSON e RDF. \newline
 Ad ogni parola estratta viene associato una relevance (valore numerico compreso tra 0 e 1), che indica l'incidenza della parola all'interno del testo.
 Nel nostro caso sono state usate parole con relevance maggiore o uguale di 0.6. 
+
+\subsection{Vis.js}
+Vis.js \'e una libreria javascript che permette la visualizzazione dinamica di grafi, timeline e grafici a due o tre dimensioni. La struttura architetturale \'e illustrata nell'immagine seguente.
+\begin{figure} [!h] 
+\centering
+\includegraphics[scale=0.45]{immaginiTesina/vis_overview.png}
+\end{figure}
+
+
+Nel nostro caso abbiamo usato tale libreria per generare un grafo contenete gli articoli con le relative relazioni semantiche. Un grafo in Vis.js \'e una struttura costituita da nodi ed archi. Di seguito \'e riportato un esempio con cinque nodi e quattro archi.
+
+\begin{lstlisting}
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+
+  <script type="text/javascript" src="../../dist/vis.js"></script>
+</head>
+
+<body>
+
+<div id="mynetwork"></div>
+
+<script type="text/javascript">
+  // create an array with nodes
+  var nodes = [
+    {id: 1, label: 'Node 1'},
+    {id: 2, label: 'Node 2'},
+    {id: 3, label: 'Node 3'},
+    {id: 4, label: 'Node 4'},
+    {id: 5, label: 'Node 5'}
+  ];
+
+  // create an array with edges
+  var edges = [
+    {from: 1, to: 2},
+    {from: 1, to: 3},
+    {from: 2, to: 4},
+    {from: 2, to: 5}
+  ];
+
+  // create a network
+  var container = document.getElementById('mynetwork');
+  var data= {
+    nodes: nodes,
+    edges: edges,
+  };
+  var options = {
+    width: '400px',
+    height: '400px'
+  };
+  var network = new vis.Network(container, data, options);
+</script>
+
+</body>
+</html>
+\end{lstlisting}
 
 
 
  
 
 
----------------Qui possiamo inserire sottosezioni con la pala se vogliamo descrivere nel dettaglio alcune delle tecnologie utilizzate---------
+
 
 \section{Implementazione}
 \label{sec:implementation}
@@ -280,12 +336,189 @@ La classe \'e composta dal solo metodo statico ExtractKeyword. Tale metodo prend
 \lstinputlisting[style=java, firstline=13, caption=KeywordExtractor.java]{./src/keywords/KeywordExtractor.java}
 
 
-\lstinputlisting[style=xml, caption=Esempio di documento restituito dalla classe KeywordExtractor]{./alchemyexemple.xml}
+\lstinputlisting[style=xml, caption=Esempio di documento restituito dalla classe KeywordExtractor]{alchemyexemple.xml}
 
+\subsection{Lo schema ontologico}
+Una volta realizzato il dataset con le relative informazioni, il passo successivo è stato quello di definire la semantica sottostante. L'idea è stata quella di partire da uno schema esistente che fosse flessibile per avere l'opportunità di estenderlo nel caso fosse stato necessaria l'aggiunta di ulteriori entità.
+
+\subsubsection{Conceptual Reference Model (CRM);}
+Il modello utilizzato è il CIDOC-CRM, usato da musei ed altre istuzioni culturali per la descrizione di relazioni tra entità per valorizzare lo scambio di informazioni tra fonti eterogenee.
+ 
+Per definizione, un'onotologia \'e CRM compatibile se rispetta lo schema di base (illustrato in seguito) proposto dagli autori.
+
+
+\begin{figure} [!h] 
+	\centering
+	\includegraphics[scale=1.50]{immaginiTesina/ridotto.jpg}
+\end{figure}
+ Lo schema di base attualmente comprende  93 classi e 165 proprietà delle quali solo un sottoinsieme sono risultate funzionali al nostro obiettivo:
+	 \begin{itemize}
+	 	\item Entità
+	 	\begin{enumerate}
+	 		\item \textbf{E1\_Production:} In CRM un oggetto reale è opportuno vederlo come il risultato di un'attività (in questo l'attività è descritta come "produzione"). Nel nostro caso un qualsiasi articolo può essere visto come il prodotto risultante
+	 	\end{enumerate}
+	 \end{itemize}
+ 
+ Per rappresentare in modo corretto le informazioni estratte da DBLP \'e stato necessario aggiungere, allo schema di base del CRM, altre classi e propriet\'a.  \newline
+
+\subsubsection{Estensioni al CRM}
+Essendo un modello principalmente progettato per le istituzioni culturali, è stato necessario effettuare delle aggiunte allo schema di partenza. Di seguito verrano elencate le entità e le proprietà con le opportune motivazioni:
+%\begin{itemize}
+%	\item Entità
+		%\begin{enumerate}
+			%contenuto...
+		%\end{enumerate}
+%\end{itemize}
 
 \subsection{Popolamento dell'ontologia}
 
+
 \subsection{Query SPARQL}
+
+Per poter effettuare al meglio le query sull'ontologia abbiamo deciso di implementare la classe \textit{query-sparql} (file query.php). Tale classe è costituita da funzioni che, quando chiamate, restituiscono la query ad esse associate.
+\newline \newline
+La lista degli articoli che contengono un sottoinsieme di keywords e topics dei medesimi dell'articolo di partenza, viene resituita in formato JSON dal file ricerca.php all'interno del quale vengono fatte le chiamate a funzione della classe \textit{query-sparql}. Il JSON restituito \'e un array contenente la lista di keywords e topics dell'articolo di partenza e da un array contenete oggetti di tipo \textit{article} dove per ognuno è riportata la lista di keyword e topic che corrispondono, il titolo e l'id che identifica univocamente il nodo del grafo successivamente associato.
+Di seguito sono riportate alcune delle query  Sparql usate per interrogare l'ontologia. Per ulteriori chiarimenti consultare i file query.php e ricerca.php.
+
+\begin{itemize}
+\item \textbf{Dal titolo di un articolo estrarre topic.}
+\begin{lstlisting}
+prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/
+docs#>
+
+SELECT  ?title_value ?topic_value
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "Representation of Graphs".
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P56_bears_feature ?topic.
+  ?topic sd:Topic_value ?topic_value.
+}
+\end{lstlisting}
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{Dal titolo di un articolo estrarre keywords e relevance.}
+\begin{lstlisting}
+prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/
+docs#>
+
+SELECT  ?title_value ?t ?r
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "Representation of Graphs".
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Text ?t.
+  ?key sd:Relevance ?r
+}
+\end{lstlisting}
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{Dalle keywords dell'articolo di partenza estrae gli articoli che hanno un sottoinsieme di keyword in comune, escludendo l'articolo di partenza.}
+\begin{lstlisting}
+prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016
+/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+
+SELECT   ?title_value  (SUM(xsd:double(?r)) as ?totalR) 
+
+WHERE
+{
+  {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="following sense")} UNION 
+  {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="transition systems")} UNION
+  {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="label-disjoint cycles")}UNION
+  {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="finite labelled transition")}UNION
+   {?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+  ?doc crm:P149_is_identified_by ?key.
+  ?key sd:Relevance ?r.
+  ?key sd:Text ?t.
+    FILTER(?t="finite set")}
+  
+  FILTER(?title_value!="A decomposition theorem for finite 
+  persistent transition systems").
+}
+
+group by ?title_value
+ORDER BY DESC(?totalR) 
+\end{lstlisting}
+\end{itemize}
+
+
+\begin{itemize}
+\item \textbf{Dai topics dell'articolo di partenza estrae gli articoli che hanno un sottoinsieme di topic in comune, escludendo l'articolo di partenza.}
+\begin{lstlisting}
+prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/
+docs#>
+
+SELECT   ?title_value (COUNT(DISTINCT ?topic_value) AS ?count) 
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P56_bears_feature ?topic.
+
+  {?topic sd:Topic_value "Software Engineering/Programming
+   and Operating Systems".} UNION
+  {?topic sd:Topic_value "Computer Systems Organization 
+  and Communication Networks".} UNION
+  {?topic sd:Topic_value "Computational Mathematics and 
+  Numerical Analysis".} UNION
+  {?topic sd:Topic_value "Information Systems and Communication 
+  Service".} UNION
+  {?topic sd:Topic_value "Theory of Computation".} UNION
+  {?topic sd:Topic_value "Data Structures, Cryptology and 
+  Information Theory".}.
+  ?topic sd:Topic_value $topic_value.
+
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value ?title_value.
+ 
+  FILTER (?title_value != "Representation of Graphs").
+}
+GROUP BY ?title_value
+ORDER BY ?title_value
+\end{lstlisting}
+\end{itemize}
 
 \subsection{Front-end}
 Il lavoro viene presentato come una pagina web interattiva alla quale \'e possibile sottomettere query...

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.1.28)  1 FEB 2016 14:00
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.1.28)  1 FEB 2016 21:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -530,53 +530,82 @@ azioni
 
 LaTeX Warning: Citation 'DBLP' on page 1 undefined on input line 121.
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--124
+
+ []
+
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 124.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 126.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 124.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 126.
 
 
-LaTeX Warning: Citation 'CIDOC' on page 2 undefined on input line 142.
+LaTeX Warning: Citation 'CIDOC' on page 2 undefined on input line 143.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 142--145
-
- []
-
-<immaginiTesina/ridotto.jpg, id=11, 236.38312pt x 438.13687pt>
-File: immaginiTesina/ridotto.jpg Graphic file (type jpg)
-
-<use immaginiTesina/ridotto.jpg>
-Package pdftex.def Info: immaginiTesina/ridotto.jpg used on input line 148.
-(pdftex.def)             Requested size: 354.5738pt x 657.20367pt.
-
-
-LaTeX Warning: Float too large for page by 61.40341pt on input line 149.
-
-[2] [3 <./immaginiTesina/ridotto.jpg>] [4]
-Underfull \hbox (badness 10000) in paragraph at lines 196--199
+[2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 191--194
 
  []
 
 
-Overfull \hbox (14.4939pt too wide) in paragraph at lines 200--201
+Overfull \hbox (14.4939pt too wide) in paragraph at lines 195--196
 [][][][][][][][][][][][][][][][][][] 
  []
 
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+<immaginiTesina/vis_overview.png, id=20, 849.1725pt x 758.835pt>
+File: immaginiTesina/vis_overview.png Graphic file (type png)
 
-Overfull \hbox (3.11458pt too wide) in paragraph at lines 224--225
+<use immaginiTesina/vis_overview.png>
+Package pdftex.def Info: immaginiTesina/vis_overview.png used on input line 214
+.
+(pdftex.def)             Requested size: 382.1241pt x 341.4726pt.
+
+Overfull \hbox (22.1241pt too wide) in paragraph at lines 214--215
+ [][] 
+ []
+
+[4]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 221.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 221.
+
+Overfull \hbox (73.62451pt too wide) in paragraph at lines 226--227
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[5 <./immaginiTesina/vis_overview.png>]
+Overfull \hbox (1.35376pt too wide) in paragraph at lines 252--253
+[][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (21.06396pt too wide) in paragraph at lines 261--262
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (3.11458pt too wide) in paragraph at lines 280--281
 \OT1/cmr/m/n/10.95 Per co-strui-re il da-ta-set di meta-informazioni dei do-cu-
 men-ti pre-sen-ti su DBLP,
  []
 
-[5] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+[6] (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2013/08/26 1.5b listings language file
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
@@ -585,25 +614,157 @@ File: lstmisc.sty 2013/08/26 1.5b (Carsten Heinz)
 (./src/Count.java
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <9> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 10.
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 27.
- (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
-File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <9> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 27.
-)
-[6] (./src/scraper/StandardScraper.java [7])
-(./lib/datasetWithAbstract/dataset1.xml [8]) (./src/scraper/FactoryScraper.java
-) [9]
+ [7]) (./src/scraper/StandardScraper.java [8])
+(./lib/datasetWithAbstract/dataset1.xml [9]) (./src/scraper/FactoryScraper.java
+[10])
 
-LaTeX Warning: Citation 'alchemy' on page 10 undefined on input line 259.
+LaTeX Warning: Citation 'alchemy' on page 11 undefined on input line 315.
 
-(./src/keywords/scraperForKeyword.java [10]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+(./src/keywords/scraperForKeyword.java [11] [12]) [13]
+(./src/keywords/KeywordExtractor.java) (./alchemyexemple.xml)
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+ [14]
+<immaginiTesina/ridotto.jpg, id=62, 236.38312pt x 438.13687pt>
+File: immaginiTesina/ridotto.jpg Graphic file (type jpg)
 
- [11])
-[12] (./src/keywords/KeywordExtractor.java) (./alchemyexemple.xml) [13]
-[14] (./tesinaWS.aux)
+<use immaginiTesina/ridotto.jpg>
+Package pdftex.def Info: immaginiTesina/ridotto.jpg used on input line 352.
+(pdftex.def)             Requested size: 354.5738pt x 657.20367pt.
+
+
+LaTeX Warning: Float too large for page by 61.40341pt on input line 353.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ² in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--363
+
+ []
+
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¨ in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--382
+
+ []
+
+[15]
+Overfull \hbox (94.4295pt too wide) in paragraph at lines 388--389
+[][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (2.44855pt too wide) in paragraph at lines 396--397
+[][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (94.4295pt too wide) in paragraph at lines 409--410
+[][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (2.44855pt too wide) in paragraph at lines 417--418
+[][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (87.85944pt too wide) in paragraph at lines 431--432
+[][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[16]
+Overfull \hbox (28.72882pt too wide) in paragraph at lines 436--438
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (48.43903pt too wide) in paragraph at lines 476--477
+[][][][][][][][][][][][][][][][] 
+ []
+
+[17]
+Overfull \hbox (94.4295pt too wide) in paragraph at lines 491--492
+[][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (74.7193pt too wide) in paragraph at lines 494--496
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (48.43903pt too wide) in paragraph at lines 500--501
+[][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (28.72882pt too wide) in paragraph at lines 502--503
+[][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (28.72882pt too wide) in paragraph at lines 504--505
+[][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (81.28937pt too wide) in paragraph at lines 506--507
+[][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (35.29889pt too wide) in paragraph at lines 508--509
+[][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (41.86896pt too wide) in paragraph at lines 509--510
+[][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (22.15875pt too wide) in paragraph at lines 516--517
+[][][][][][][][][][][][][][][][][] 
+ []
+
+[18] [19] [20 <./immaginiTesina/ridotto.jpg>] (./tesinaWS.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -617,13 +778,13 @@ Package logreq Info: Writing requests to 'tesinaWS.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 9850 strings out of 495017
- 156877 string characters out of 6181021
- 699627 words of memory out of 5000000
- 12910 multiletter control sequences out of 15000+600000
+ 9941 strings out of 495017
+ 158088 string characters out of 6181021
+ 698594 words of memory out of 5000000
+ 13000 multiletter control sequences out of 15000+600000
  11587 words of font info for 42 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 46i,8n,59p,913b,1571s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 46i,8n,59p,913b,1619s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
@@ -637,10 +798,10 @@ m/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/sh
 are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on tesinaWS.pdf (14 pages, 276865 bytes).
+Output written on tesinaWS.pdf (20 pages, 334759 bytes).
 PDF statistics:
- 107 PDF objects out of 1000 (max. 8388607)
- 75 compressed objects within 1 object stream
+ 127 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
