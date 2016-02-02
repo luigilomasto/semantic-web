@@ -5,6 +5,8 @@
 \usepackage{color}
 \usepackage{mathtools}
 \usepackage{biblatex}
+\usepackage{float}
+
 %useful colors
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -191,7 +193,7 @@ Le tecnologie utilizzate per lo sviluppo di questo progetto sono molteplici:
 Libreria Java che permette di lavorare con documenti HTML. Fornisce delle API molto semplici con le quali \'e possibile estrarre e manipolare i dati a partire dal DOM di una pagina mediante l'uso di espressioni XPath. 
 \newline \newline 
 \textbf  {Esempio}
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 Document doc = Jsoup.connect(URL).timeout(50*1000).get();
 Elements elemsAbstract = doc.select("p.Para");
 \end{lstlisting} 
@@ -217,7 +219,7 @@ Vis.js \'e una libreria javascript che permette la visualizzazione dinamica di g
 
 Nel nostro caso abbiamo usato tale libreria per generare un grafo contenete gli articoli con le relative relazioni semantiche. Un grafo in Vis.js \'e una struttura costituita da nodi ed archi. Di seguito \'e riportato un esempio con cinque nodi e quattro archi.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 <!doctype html>
 <html>
 <head>
@@ -266,12 +268,6 @@ Nel nostro caso abbiamo usato tale libreria per generare un grafo contenete gli 
 \end{lstlisting}
 
 
-
- 
-
-
-
-
 \section{Implementazione}
 \label{sec:implementation}
 
@@ -279,7 +275,7 @@ Nel nostro caso abbiamo usato tale libreria per generare un grafo contenete gli 
 \subsection{Costruzione del dataset}
 Per costruire il dataset di meta-informazioni dei documenti presenti su DBLP, \'e stato sviluppato un package java chiamato \emph{scraper}, costituito dalle seguenti classi:
 \begin{description}
-	\item[Count.java] Contenente il main. Si occupa, preso in input il dataset di meta-informazioni degli articoli scaricabile da DBLP, di eliminafare le informazioni superflue e di invocare le classi di scraping quando si trova l'elemento <url>.
+	\item[.java] Contenente il main. Si occupa, preso in input il dataset di meta-informazioni degli articoli scaricabile da DBLP, di eliminafare le informazioni superflue e di invocare le classi di scraping quando si trova l'elemento <url>.
 	\item[SuperScraper.java] Superclasse astratta degli scraper, utile per il polimorfismo.
 	\item[FactoryScraper.java] Implementazione del Factory Method per gli scraper.
 	\item[IJIEMScraper.java] Istanza di SuperScraper.
@@ -339,27 +335,26 @@ La classe \'e composta dal solo metodo statico ExtractKeyword. Tale metodo prend
 \lstinputlisting[style=xml, caption=Esempio di documento restituito dalla classe KeywordExtractor]{alchemyexemple.xml}
 
 \subsection{Lo schema ontologico}
-Una volta realizzato il dataset con le relative informazioni, il passo successivo è stato quello di definire la semantica sottostante. L'idea è stata quella di partire da uno schema esistente che fosse flessibile per avere l'opportunità di estenderlo nel caso fosse stato necessaria l'aggiunta di ulteriori entità.
+Una volta realizzato il dataset con le relative informazioni, il passo successivo è stato quello di definire la semantica sottostante. L'idea è stata quella di partire da uno schema esistente che fosse flessibile per avere l'opportunità di estenderlo nel caso fosse stato necessaria l'aggiunta di ulteriori entit\'a.
 
 \subsubsection{Conceptual Reference Model (CRM);}
 Il modello utilizzato è il CIDOC-CRM, usato da musei ed altre istuzioni culturali per la descrizione di relazioni tra entità per valorizzare lo scambio di informazioni tra fonti eterogenee.
  
-Per definizione, un'onotologia \'e CRM compatibile se rispetta lo schema di base (illustrato in seguito) proposto dagli autori.
+Per definizione, un'onotologia \'e CRM compatibile se rispetta lo schema di base proposto dagli autori.
 
-
-\begin{figure} [!h] 
-	\centering
-	\includegraphics[scale=1.50]{immaginiTesina/ridotto.jpg}
-\end{figure}
  Lo schema di base attualmente comprende  93 classi e 165 proprietà delle quali solo un sottoinsieme sono risultate funzionali al nostro obiettivo:
 	 \begin{itemize}
-	 	\item Entità
+	 	\item Entit\'a
 	 	\begin{enumerate}
 	 		\item \textbf{E1\_Production:} In CRM un oggetto reale è opportuno vederlo come il risultato di un'attività (in questo l'attività è descritta come "produzione"). Nel nostro caso un qualsiasi articolo può essere visto come il prodotto risultante
 	 	\end{enumerate}
 	 \end{itemize}
  
- Per rappresentare in modo corretto le informazioni estratte da DBLP \'e stato necessario aggiungere, allo schema di base del CRM, altre classi e propriet\'a.  \newline
+ Per rappresentare in modo corretto le informazioni estratte da DBLP \'e stato necessario aggiungere, allo schema di base del CRM, altre classi e propriet\'a. 
+  
+\begin{center} 
+	\includegraphics[scale=1.50]{immaginiTesina/ridotto.jpg}
+\end{center}
 
 \subsubsection{Estensioni al CRM}
 Essendo un modello principalmente progettato per le istituzioni culturali, è stato necessario effettuare delle aggiunte allo schema di partenza. Di seguito verrano elencate le entità e le proprietà con le opportune motivazioni:
@@ -382,11 +377,10 @@ Di seguito sono riportate alcune delle query  Sparql usate per interrogare l'ont
 
 \begin{itemize}
 \item \textbf{Dal titolo di un articolo estrarre topic.}
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
 prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/
-docs#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
 
 SELECT  ?title_value ?topic_value
  
@@ -403,11 +397,10 @@ SELECT  ?title_value ?topic_value
 
 \begin{itemize}
 \item \textbf{Dal titolo di un articolo estrarre keywords e relevance.}
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
 prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/
-docs#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
 
 SELECT  ?title_value ?t ?r
  
@@ -425,11 +418,10 @@ SELECT  ?title_value ?t ?r
 
 \begin{itemize}
 \item \textbf{Dalle keywords dell'articolo di partenza estrae gli articoli che hanno un sottoinsieme di keyword in comune, escludendo l'articolo di partenza.}
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
 prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016
-/docs#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 
 
@@ -485,11 +477,10 @@ ORDER BY DESC(?totalR)
 
 \begin{itemize}
 \item \textbf{Dai topics dell'articolo di partenza estrae gli articoli che hanno un sottoinsieme di topic in comune, escludendo l'articolo di partenza.}
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
 prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/
-docs#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
 
 SELECT   ?title_value (COUNT(DISTINCT ?topic_value) AS ?count) 
  
@@ -497,17 +488,12 @@ SELECT   ?title_value (COUNT(DISTINCT ?topic_value) AS ?count)
   ?prod crm:P108_has_produced ?doc.
   ?doc crm:P56_bears_feature ?topic.
 
-  {?topic sd:Topic_value "Software Engineering/Programming
-   and Operating Systems".} UNION
-  {?topic sd:Topic_value "Computer Systems Organization 
-  and Communication Networks".} UNION
-  {?topic sd:Topic_value "Computational Mathematics and 
-  Numerical Analysis".} UNION
-  {?topic sd:Topic_value "Information Systems and Communication 
-  Service".} UNION
+  {?topic sd:Topic_value "Software Engineering/Programming and Operating Systems".} UNION
+  {?topic sd:Topic_value "Computer Systems Organization and Communication Networks".} UNION
+  {?topic sd:Topic_value "Computational Mathematics and Numerical Analysis".} UNION
+  {?topic sd:Topic_value "Information Systems and Communication Service".} UNION
   {?topic sd:Topic_value "Theory of Computation".} UNION
-  {?topic sd:Topic_value "Data Structures, Cryptology and 
-  Information Theory".}.
+  {?topic sd:Topic_value "Data Structures, Cryptology and Information Theory".}.
   ?topic sd:Topic_value $topic_value.
 
   ?doc crm:P102_has_title ?title.
@@ -520,12 +506,91 @@ ORDER BY ?title_value
 \end{lstlisting}
 \end{itemize}
 
+
+Terminata la generazione del grafo, \'e stato necessario effettuare ulteriori query per estrarre le informazioni di ogni articolo ottenuto. Il file \textit{datiArticolo.php} restituisce, come visto prima per il file \textit{ricerca.php}, un file JSON contenente le informazioni richieste. \newline Di seguito le query usate:
+
+\begin{itemize}
+\item \textbf{Restituisce gli autori di un articolo}
+\begin{lstlisting}[breaklines=true]
+prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  ?author_name 
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "Representation of Graphs".
+  ?prod crm:P14_carried_out_by ?author.
+  ?author sd:name ?author_name
+}
+
+\end{lstlisting}
+
+\item \textbf{Restituisce anno di pubblicazione e rivista }
+\begin{lstlisting}[breaklines=true]
+prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT  ?journal ?anno
+ 
+  WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "On the Power of Chain Rules in Context Free Grammars".
+  ?doc sd:published_by ?journal.
+  ?prod crm:P4_has_time-span ?date.
+  ?date sd:Anno ?anno
+ 
+  
+}
+\end{lstlisting}
+
+\item \textbf{Restituisce l'url di un articolo}
+\begin{lstlisting}[breaklines=true]
+prefix crm: <http://www.cidoc-crm.org/cidoc-crm/>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix sd: <http://www.semanticweb.org/francesco/ontologies/2016/docs#>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?url_value
+   WHERE{
+  ?prod crm:P108_has_produced ?doc.
+  ?doc crm:P102_has_title ?title.
+  ?title sd:Title_value "Representation of Graphs".
+  ?doc crm:P67_refers_to ?url.
+  ?url sd:Url_value ?url_value
+}
+
+\end{lstlisting}
+\end{itemize}
+
+
 \subsection{Front-end}
-Il lavoro viene presentato come una pagina web interattiva alla quale \'e possibile sottomettere query...
+Il lavoro viene presentato come una pagina web interattiva mediante la quale è possibile, partendo dall'articolo inserito, visualizzare il grafo generato dalle relazioni semantiche che l'articolo cercato ha con gli altri articoli dell'ontologia. Il layout \'e molto semplice e sfrutta lo stile di base offerto da Bootstrap. 
+
+\begin{center}
+\includegraphics[scale=0.40]{immaginiTesina/vuoto.png}
+\end{center}
+
+La Search Bar \'e stata implementata in javascript (\textit{autocomplete.js}). I titoli degli articoli sono contenuti in un array che viene, ad ogni immissione, richiamato per mostrare i titoli che soddisfano la ricerca. Sottomessa la query, viene invocata la funzione \textit{generate-graph}. \newline \newline\newline
+\lstinputlisting[style=java, firstline=189,lastline=263, caption=indexVisjs.html]{./WebSemanticoV2/indexVisjs.html}
+
+\begin{center}
+\includegraphics[scale=0.40]{immaginiTesina/2layer.png}
+\end{center}
+
 
 \section{Conclusioni}
 \label{sec:conclusions}
 Un altro utilizzo interessante, anche se non pienamente pertinente con gli obiettivi del lavoro, \'e la possibilit\'a di prevedere query che prendano in input dei topic e restituiscano tutti gli articoli che hanno quel topic e le relative parole chiave. In questo modo, cambiando il contesto (e.g. l'ontologia viene popolata con un set diverso di articoli, magari provenienti da una serie di conferenze), si pu\'o mostrare come lo stesso argomento viene trattato in maniera diversa a seconda del contesto. Se ad esempio il topic \'e \emph{Bioinformatica}, in un contesto di proceedings di conferenze informatiche le parole chiave potrebbero essere \emph{Algoritmi}, \emph{Strutture Dati}, \emph{Complessit\'a Computazionale}, etc. Mentre lo stesso topic in un contesto di proceedings di conferenze biologhe potrebbe avere come parole chiave \emph{Ribosomi}, \emph{Proteine}, etc. 
+
+
+
 
 
 \end{document}
