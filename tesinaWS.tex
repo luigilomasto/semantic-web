@@ -3,8 +3,9 @@
 \usepackage[italian]{babel}
 \usepackage{listings}
 \usepackage{color}
-\usepackage{mathtools}
-\usepackage{biblatex}
+%\usepackage{mathtools}
+%\usepackage{biblatex}
+\usepackage{graphicx}
 \usepackage{float}
 
 %useful colors
@@ -144,10 +145,6 @@ In questa fase, \'e stata studiata la progettazione di un'ontologia adatta a ges
 \end{enumerate}
 Per l'ontologia, la nostra scelta \'e ricaduta su CIDOC/CRM\cite{CIDOC}. Il modello concettuale CIDOC/CRM \'e un stato progettato per la gestione di contenuti relativi alla storia ed alle opere d'arte, quindi si \'e rivelato adatto al nostro scopo. 
 
-
-
-
------------Qui c\'e da appronfondire sullo schema che abbiamo progettato noi a partire dalle meta informazioni Francesco-----
 
 \subsection{Interrogazione dell'ontologia}
 \label{subsec:query}
@@ -335,38 +332,155 @@ La classe \'e composta dal solo metodo statico ExtractKeyword. Tale metodo prend
 \lstinputlisting[style=xml, caption=Esempio di documento restituito dalla classe KeywordExtractor]{alchemyexemple.xml}
 
 \subsection{Lo schema ontologico}
-Una volta realizzato il dataset con le relative informazioni, il passo successivo è stato quello di definire la semantica sottostante. L'idea è stata quella di partire da uno schema esistente che fosse flessibile per avere l'opportunità di estenderlo nel caso fosse stato necessaria l'aggiunta di ulteriori entit\'a.
+Una volta realizzato il dataset con le relative informazioni, il passo successivo \'e stato quello di definire la semantica sottostante. L'idea \'e stata quella di partire da uno schema esistente che fosse flessibile per avere l'opportunit\'a di estenderlo nel caso fosse stata necessaria l'aggiunta di ulteriori entit\'a.
 
 \subsubsection{Conceptual Reference Model (CRM);}
-Il modello utilizzato è il CIDOC-CRM, usato da musei ed altre istuzioni culturali per la descrizione di relazioni tra entità per valorizzare lo scambio di informazioni tra fonti eterogenee.
+Il modello utilizzato \'e il CIDOC-CRM, usato da musei ed altre istuzioni culturali per la descrizione di relazioni tra entit\'a per valorizzare lo scambio di informazioni tra fonti eterogenee.
  
-Per definizione, un'onotologia \'e CRM compatibile se rispetta lo schema di base proposto dagli autori.
+Per definizione, un'onotologia \'e CRM compatibile se rispetta il seguente schema proposto dagli autori:
 
- Lo schema di base attualmente comprende  93 classi e 165 proprietà delle quali solo un sottoinsieme sono risultate funzionali al nostro obiettivo:
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.75]{immaginiTesina/ridotto.jpg}
+	\caption{Schema CRM ridotto}
+	\centering
+\end{figure}
+
+
+
+ Lo schema di base attualmente comprende  93 classi e 165 propriet\'a, delle quali solo un sottoinsieme sono risultate funzionali al nostro obiettivo:
 	 \begin{itemize}
-	 	\item Entit\'a
+	 	
+	 	%%CRM Entities Description
+	 	
+	 	\item \textbf{\textit{Entit\'a}}
 	 	\begin{enumerate}
-	 		\item \textbf{E1\_Production:} In CRM un oggetto reale è opportuno vederlo come il risultato di un'attività (in questo l'attività è descritta come "produzione"). Nel nostro caso un qualsiasi articolo può essere visto come il prodotto risultante
+	 		\item \textbf{E12\_Production:} In CRM un oggetto reale \'e opportuno considerarlo come il risultato di un'attivit\'a (in questo caso l'attivit\'a \'e descritta come "produzione",  infatti, nello schema viene definita come sottoclasse dell'entit\'a E7\_Activity ).  Nel rispetto di questo, abbiamo ritenuto opportuno associare ad ogni articolo una produzione della quale esso \'e il risultato finale.
+	 		\item \textbf{E31\_Document:} Questa classe identifica oggetti tramite i quali si effettuano affermazioni sulla realt\'a tramite testo, immagini o altri mezzi visivi. Viene definito come sottoclasse di "E73\_Information Object".
+	 		\item \textbf{E35\_Title:} Questa classe comprende i nomi che identificano un qualsiasi lavoro.
+	 		\item \textbf{E52\_Time-Span:} Questa classe descrive l'arco temporale durante il quale una generica attivit\'a ha avuto luogo.
 	 	\end{enumerate}
+	 	
+	 	%%CRM Object Properties Description
+	 	
+	 	\item \textbf{\textit{Object Properties}}
+	 		\begin{enumerate}
+	 			\item \textbf{P14\_carried\_out\_by:} Descrive la  partecipazione di un generico attore ad una attivit\'a. Nel nostro caso il dominio \'e rappresentato dall'entit\'a E12\_Production e il range all'entit\'a Author.
+	 			
+	 			\item \textbf{P108\_has\_produced:} Identifica la realizzazione di un generico oggetto fisico (prodotto dall'uomo) in seguito ad un'attivit\'a. Nel nostro caso il dominio \'e rappresentato dall'entit\'a  E12\_Production e il range dall'entit\'a E31\_Document.
+	 			
+	 			\item \textbf{P4\_has\_time-span:} Descrive l'arco di tempo di una qualsiasi entit\'a temporale (eg. attivit\'a). Nel nostro caso il dominio \'e rappresentato dall'entit\'a E12\_Production e il range dall'entit\'a E52 Time-span.
+	 			
+	 			\item \textbf{P102\_has\_title:} Associa istanze dell'entit\'a titolo ad un generico oggetto fisico. Nel nostro caso il dominio \'e rappresentato dall'entit\'a E31\_Document e il range dall'entit\'a E35\_Title.
+	 			
+	 			\item \textbf{P56\_bears\_feature:} Associa un'istanza di un generico oggetto fisico ad istanze di E26\_Physical\_Feature (classe che comprende le caratteristiche e gli attributi di un generico oggetto). Nel nostro caso il dominio \'e rappresentato dall'entit\'a E31\_Document e il range dall'entit\'a Topic.
+	 			
+	 			\item \textbf{P149\_is\_identified\_by:} Associa istanze di un generico oggetto ad istanze di E75\_Conceptual\_Object\_Appellation (classe che comprende appellativi per un generico oggetto). Nel nostro caso il dominio \'e rappresentato dall'entit\'a E31\_Document e il range dall'entit\'a Keyword.
+	 			
+	 			\item \textbf{P67\_refers\_to:} Propriet\'a molto generica. Collega una qualsiasi entit\'a CRM ad istanze di E89\_Propositional\_Object (classe che comprende astrazioni di oggetti non materiali). Nel nostro caso il dominio \'e rappresentato dall'entit\'a E31\_Document e il range dall'entit\'a Url.
+	 			
+	 			
+	 		\end{enumerate}
 	 \end{itemize}
  
- Per rappresentare in modo corretto le informazioni estratte da DBLP \'e stato necessario aggiungere, allo schema di base del CRM, altre classi e propriet\'a. 
+ Si nota come alcune classi citate si differenziano dalla notazione tipica di CRM (lettera E o P seguita da un numero), esse rappresentano le classi aggiunte allo schema di base.
+
   
-\begin{center} 
-	\includegraphics[scale=1.50]{immaginiTesina/ridotto.jpg}
-\end{center}
+
 
 \subsubsection{Estensioni al CRM}
-Essendo un modello principalmente progettato per le istituzioni culturali, è stato necessario effettuare delle aggiunte allo schema di partenza. Di seguito verrano elencate le entità e le proprietà con le opportune motivazioni:
-%\begin{itemize}
-%	\item Entità
-		%\begin{enumerate}
-			%contenuto...
-		%\end{enumerate}
-%\end{itemize}
+Essendo un modello principalmente progettato per le istituzioni culturali, per rappresentare in modo corretto le informazioni estratte da DBLP, \'e stato necessario aggiungere allo schema di base del CRM, altre classi e propriet\'a che elencheremo di seguito con le opportune motivazioni.
+
+\begin{itemize}
+	
+	%%Entities
+	
+	\item \textbf{\textit{Entit\'a}}
+		\begin{enumerate}
+			
+			\item \textbf{Author:} Definita come sottoclasse di E21\_Person e della pi\'u generica entit\'a E39\_Actor, rappresenta l'insieme degli autori dei vari articoli. \'E stato necessario creare questa classe per poterla collegare, tramite la propriet\'a CRM P14\_carried\_out\_by, all'attivit\'a "produzione", come descritto in precedenza.
+			
+			\item \textbf{Topic:} Definita come specializzazione di un generico oggetto concettuale ed informativo (sottoclasse di E73\_information Object ). Essa descrive l'insieme dei topic di ogni articolo, \'e stata aggiunta in quanto lo schema di base non prevedeva questo tipo di concetto. Istanze di questa classe sono connesse alle istanze della classe E31\_Document tramite la propriet\'a P56\_bears\_feature. 
+			
+			\item \textbf{Keyword:} Come la classe Topic, anche la classe Keyword \'e stata definita come sottoclasse dei generici oggetti concettuali ed informativi, descrive l'insieme delle parole chiave associate ad ogni articolo. \'E stata aggiunta in quanto lo schema di base non prevedeva questo tipo di concetto. Istanze di questa classe sono connesse alle istanze della classe E31\_Document tramite la propriet\'a CRM P149\_is\_identifiied\_by.
+			
+			\item \textbf{Url:} Concettualmente definito come le classi Topic e Keyword, rappresenta l'indirizzo Web della risorsa documento, non previsto nello schema CRM di base. Ogni istanza della classe E31\_Document \'e connessa ad un'istanza di questa classe tramite la propriet\'a CRM P67\_refers\_to.
+			
+			\item \textbf{Journal:} Concettualmente inserito come oggetto informativo al pari della classe E31\_Document. Anche in questo caso CRM non prevedeva questo tipo di concetto. Ogni istanza della classe E31\_Document \'e connessa ad un'istanza di questa classe tramite la proprietà "published\_by".
+			
+						
+		\end{enumerate}
+		
+		%%Object Properties
+		\item \textbf{\textit{Object Properties}}
+		
+		
+		\begin{enumerate}
+			\item \textbf{published\_by}: Associa un'istanza della classe E31\_Document ad un'istanza della classe Journal. \'E stato necessario aggiungere questa propriet\'a in quanto lo schema CRM non definiva nessuna propriet\'a che collegasse due entit\'a E73\_Information\_Object (o pi\'u genericamente, due entit\'a E71\_Man-Made\_Thing).
+			
+		\end{enumerate}
+		
+		%%Data Properties
+		\item \textbf{\textit{Data Properties}}
+		
+			\begin{enumerate}
+				\item \textbf{Anno}: Associa un range di tipo "int" all'entit\'a E52\_Time-span. Usata per visualizzare l'anno di pubblicazione degli articoli.
+				
+				\item \textbf{Journal\_value}: Associa un range di tipo "string" all'entit\'a Journal. Usata per visualizzare il nome della riviste.
+				
+				\item \textbf{Name}: Associa un range di tipo "string" all'entit\'a Author. Usata per visualizzare il nome degli autori.
+				
+				\item \textbf{Relevance}: Associa un range di tipo "double" all'entit\'a Keyword. Usata per visualizzare la rilevanza delle parole chiave.
+				
+				\item \textbf{Text}: Associa un range di tipo "string" all'entit\'a Keyword. Usata per visualizzare il nome delle parole chiave.
+				
+				\item \textbf{Title\_value}: Associa un range di tipo "string" all'entit\'a E35\_Title. Usata per visualizzare il titolo degli articoli.
+				
+				\item \textbf{Topic\_value}: Associa un range di tipo "string" all'entit\'a Topic. Usata per visualizzare i topic di un articolo.
+				
+				\item \textbf{Url\_value}: Associa un range di tipo "string" all'entit\'a Url. Usata per visualizzare l'indirizzo Web della risorsa associata all'articolo.
+				
+					
+			\end{enumerate}
+		
+\end{itemize}
 
 \subsection{Popolamento dell'ontologia}
+Una volta definito lo schema completo delle entit\'a e delle relazioni semantiche tra di esse, il passo successivo consisteva nella generazione delle istanze. \'E stata dunque implementata una classe java funzionale allo scopo, utilizzando le API messe a disposizione dal framework Apache Jena.
+Di seguito mostreremo le parti principali del codice con le relative spiegazioni:
 
+La prima fase consiste nell'import di tutte le classi e le propriet\'a che verranno successivamente utilizzate. Si nota che i namespace utilizzati sono due:
+uno relativo alle classi del modello CRM, l'altro invece relativo alle classi che abbiamo aggiunto.
+
+\lstinputlisting[style=java, firstline=68, lastline=103]{./src/JenaModel/JenaModel.java}
+
+Prima di tutto viene richiamata la seguente funzione:
+
+\lstinputlisting[style=java, firstline=228, lastline=236]{./src/JenaModel/JenaModel.java}
+
+La funzione \'e molto semplice, permette di importare il modello costruito precedentemente con Prot\'eg\'e utilizzando la funzione read() fornita da Jena. Quest'ultima viene richiamata su un oggetto OntModel, precedentemente dichiarato, che rappresenta il nostro schema ontologico. I parametri passati al metodo sono un oggetto rappresentante lo stream in input (creato passando il path dove \'e fisicamente presente il modello da importare) e il namespace di quest'ultimo, precedentemente dichiarato.
+\newline
+
+
+La seguente porzione di codice rappresenta il core della classe:
+\lstinputlisting[style=java, firstline=105, lastline=198]{./src/JenaModel/JenaModel.java}
+
+Una volta aperto lo stream input del dataset (strutturato in xml), esso viene letto riga per riga estraendone, in maniera differenziata, le varie informazioni, dopodich\'e sequenzialmente vengono generate le istanze.
+Trattandosi di OWL, le istanze vengono generate come "individuali" tramite la funzione Jena createIndividual(), la quale prende come parametri namespace e oggetto relativo alla classe di appartenenza dell'individuale in questione. 
+Generati gli individuali, successivamento vengono connessi semanticamente tra loro tramite l'aggiunta delle propriet\'a.
+Il metodo addProperty() viene richiamato sull'oggetto che rappresenta il dominio e riceve due parametri espliciti che rappresentano rispettivamente il tipo di propriet\'a e il range.
+Poich\'e ad ogni articolo pu\'o essere connesso pi\'u di un autore, topic, o keyword, le istanze e le propriet\'a vengono aggiunte in un ciclo.
+Il motivo della decodifica  utf-8 viene spiegato nella funzione che estrae le informazioni dal documento:
+
+\lstinputlisting[style=java, firstline=253, lastline=268]{./src/JenaModel/JenaModel.java}
+Tramite libreria Jsoup vengono estrapolate le informazioni testuali dai tag xml, la codifica in utf-8 si \'e resa necessaria per rimuovere eventuali caratteri speciali dalle URI delle risorse (poich\'e ci\'o causava un errore in fase di scrittura).
+
+Infine, una volta terminata la lettura del file in input, viene scritto il modello risultante tramite il metodo addIndividuals():
+
+\lstinputlisting[style=java, firstline=213, lastline=225]{./src/JenaModel/JenaModel.java}
+
+Viene richiamata la funzione Jena: write() che stampa, operando su uno stream output, le triple in formato RDF.
+Il risultato dell'esecuzione della classe descritta sul dataset finale utilizzato per la nostra applicazione \'e un grafo di 176208 triple, sul quale sono state effettuate interrogazioni tramite le seguenti query sparql che andremo a descrivere.
 
 \subsection{Query SPARQL}
 
