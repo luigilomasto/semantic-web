@@ -452,18 +452,18 @@ Di seguito mostreremo le parti principali del codice con le relative spiegazioni
 La prima fase consiste nell'import di tutte le classi e le propriet\'a che verranno successivamente utilizzate. Si nota che i namespace utilizzati sono due:
 uno relativo alle classi del modello CRM, l'altro invece relativo alle classi che abbiamo aggiunto.
 
-\lstinputlisting[style=java, firstline=68, lastline=103]{./src/JenaModel/JenaModel.java}
+\lstinputlisting[style=java, firstline=68, lastline=103, caption=JenaModel.java]{./src/JenaModel/JenaModel.java}
 
 Prima di tutto viene richiamata la seguente funzione:
 
-\lstinputlisting[style=java, firstline=228, lastline=236]{./src/JenaModel/JenaModel.java}
+\lstinputlisting[style=java, firstline=228, lastline=236, caption=JenaModel.java]{./src/JenaModel/JenaModel.java}
 
 La funzione \'e molto semplice, permette di importare il modello costruito precedentemente con Prot\'eg\'e utilizzando la funzione read() fornita da Jena. Quest'ultima viene richiamata su un oggetto OntModel, precedentemente dichiarato, che rappresenta il nostro schema ontologico. I parametri passati al metodo sono un oggetto rappresentante lo stream in input (creato passando il path dove \'e fisicamente presente il modello da importare) e il namespace di quest'ultimo, precedentemente dichiarato.
 \newline
 
 
 La seguente porzione di codice rappresenta il core della classe:
-\lstinputlisting[style=java, firstline=105, lastline=198]{./src/JenaModel/JenaModel.java}
+\lstinputlisting[style=java, firstline=105, lastline=198, caption=JenaModel.java]{./src/JenaModel/JenaModel.java}
 
 Una volta aperto lo stream input del dataset (strutturato in xml), esso viene letto riga per riga estraendone, in maniera differenziata, le varie informazioni, dopodich\'e sequenzialmente vengono generate le istanze.
 Trattandosi di OWL, le istanze vengono generate come "individuali" tramite la funzione Jena createIndividual(), la quale prende come parametri namespace e oggetto relativo alla classe di appartenenza dell'individuale in questione. 
@@ -472,12 +472,12 @@ Il metodo addProperty() viene richiamato sull'oggetto che rappresenta il dominio
 Poich\'e ad ogni articolo pu\'o essere connesso pi\'u di un autore, topic, o keyword, le istanze e le propriet\'a vengono aggiunte in un ciclo.
 Il motivo della decodifica  utf-8 viene spiegato nella funzione che estrae le informazioni dal documento:
 
-\lstinputlisting[style=java, firstline=253, lastline=268]{./src/JenaModel/JenaModel.java}
+\lstinputlisting[style=java, firstline=253, lastline=268, caption=JenaModel.java]{./src/JenaModel/JenaModel.java}
 Tramite libreria Jsoup vengono estrapolate le informazioni testuali dai tag xml, la codifica in utf-8 si \'e resa necessaria per rimuovere eventuali caratteri speciali dalle URI delle risorse (poich\'e ci\'o causava un errore in fase di scrittura).
 
 Infine, una volta terminata la lettura del file in input, viene scritto il modello risultante tramite il metodo addIndividuals():
 
-\lstinputlisting[style=java, firstline=213, lastline=225]{./src/JenaModel/JenaModel.java}
+\lstinputlisting[style=java, firstline=213, lastline=225, caption=JenaModel.java]{./src/JenaModel/JenaModel.java}
 
 Viene richiamata la funzione Jena: write() che stampa, operando su uno stream output, le triple in formato RDF.
 Il risultato dell'esecuzione della classe descritta sul dataset finale utilizzato per la nostra applicazione \'e un grafo di 176208 triple, sul quale sono state effettuate interrogazioni tramite le seguenti query sparql che andremo a descrivere.
@@ -685,26 +685,72 @@ SELECT ?url_value
 
 
 \subsection{Front-end}
-Il lavoro viene presentato come una pagina web interattiva mediante la quale è possibile, partendo dall'articolo inserito, visualizzare il grafo generato dalle relazioni semantiche che l'articolo cercato ha con gli altri articoli dell'ontologia. Il layout \'e molto semplice e sfrutta lo stile di base offerto da Bootstrap. 
+Il lavoro viene presentato come una pagina web interattiva mediante la quale è possibile, partendo dall'articolo inserito, visualizzare il grafo generato dalle relazioni semantiche che l'articolo cercato ha con gli altri articoli dell'ontologia. Il layout \'e molto semplice e sfrutta lo stile di base offerto da Bootstrap.  
 
 \begin{center}
 \includegraphics[scale=0.40]{immaginiTesina/vuoto.png}
 \end{center}
 
-La Search Bar \'e stata implementata in javascript (\textit{autocomplete.js}). I titoli degli articoli sono contenuti in un array che viene, ad ogni immissione, richiamato per mostrare i titoli che soddisfano la ricerca. Sottomessa la query, viene invocata la funzione \textit{generate-graph}. \newline \newline\newline
-\lstinputlisting[style=java, firstline=189,lastline=263, caption=indexVisjs.html]{./WebSemanticoV2/indexVisjs.html}
+La Search Bar \'e stata implementata in javascript (\textit{autocomplete.js}). I titoli degli articoli sono contenuti in un array che viene, ad ogni immissione, richiamato per mostrare i titoli che soddisfano la ricerca. \'E possibile scegliere il numero di livelli da usare per generare il grafo secondo la logica discussa nei paragrafi precedenti. Sottomessa la query, viene invocata la funzione \textit{generate-graph}. \newline \newline\newline
+\lstinputlisting[style=java, firstline=234,lastline=310, caption=indexVisjs.html]{./WebSemanticoV2/indexVisjs.html}
 
+
+Tale funzione popola gli array node ed edge che vengono poi usati dalla libreria Vis.js per generare il grafo. Di seguito viene mostrato un esempio.
 \begin{center}
+\centering
 \includegraphics[scale=0.40]{immaginiTesina/2layer.png}
+\newline \newline
 \end{center}
 
+Da questo grafo \'e possibile, mediante le checkbox sottostanti, scegliere quali keywords o topic usare per costruire un nuovo grafo contenente i soli archi che presentano la selezione fatta. Questo permette di restringere la ricerca qualora si fosse interessati solo a particolari contesti. Viene inoltre fornita la possibilit\'a di tornare al grafo di partenza senza dover sottomettere la query di partenza.
+\newline \newline
+
+Come si pu\'o notare dall'immagine precedente, la parte sinistra del layout \'e riservata ad un contenuto informativo. Il contenuto varia a seconda di quello che si vuole visualizzare.
+\begin{itemize}
+\item \textbf{Node Information:} Se si effettua onMouseHover su di un nodo. Vengono presentate tutte le informazioni di un articolo quali: titolo, autori, rivista, anno di pubblicazione... 
+\item \textbf{Edge Information:} Se si effettua onMouseHover su un arco. Viene mostrata la relazione semantica tra il nodo sorgente ed il nodo ottenuto dalla query mediante i campi: Source, Dest, Somma relevance. Sull'arco vengono mostrate le liste di topics e keywords che hanno generato la relazione semantica tra i nodi. \newline
+Di seguito \'e riportato un esempio.
+
+
+\end{itemize} 
+\begin{center}
+\includegraphics[scale=0.40]{immaginiTesina/edgeInformation.png}
+\newline \newline
+\end{center}
+
+Facendo un doppio click su di nodo viene fatto il redirect alla sorgente dell'articolo, in modo da poter acquisire ulteriori informazioni. \newline \newline
+Osservando il grafo si pu\'o notare come lo spessore degli archi non sia lo stesso. Questo dipende dal valore della relevance, quindi dal legame semantico che c'\'e tra i nodi. Questa differenza permette di percepire subito quali sono gli articoli pi\'u correlati, facilitando quindi l'aria d'interesse che si desidera. \newline \newline
+Di seguito un estratto di codice che mostra come vengono creati i nodi e gli archi.
+\newline\newline
+\textbf{Creazione Node:} 
+
+\begin{lstlisting}[breaklines=true,style=java]
+var nodeToPush = JSON.parse('{"id":"' +actualTitle +'", "label":"' + id + '", "color": "' + color[layer] + '"}');
+\end{lstlisting}
+\begin{itemize}
+\item id: \'e il titolo dell'articolo.
+\item label: identificativo univoco del nodo nel grafo (valore numerico, solo per la sorgente \'e s).
+\item color: colore del layer d'appartenenza.
+\newline\newline
+\end{itemize}
+
+\textbf{Creazione Edge:} 
+\begin{lstlisting}[breaklines=true,style=java]
+edges.push(JSON.parse('{"from":"' + title + '", "to": "' + actualTitle + '", "id": ' + edgeId + ', "value":' + edgeValue + ', "title":"' + relation + '", "color": "' + color[layer] + '"}'));
+\end{lstlisting}
+\begin{itemize}
+\item from: nodo sorgente.
+\item to: nodo destinatario.
+\item id: identificativo dell'arco.
+\item value: spessore dell'arco.
+\item color: colore del layer d'appartenenza.
+\end{itemize}
+
+
+   
 
 \section{Conclusioni}
 \label{sec:conclusions}
 Un altro utilizzo interessante, anche se non pienamente pertinente con gli obiettivi del lavoro, \'e la possibilit\'a di prevedere query che prendano in input dei topic e restituiscano tutti gli articoli che hanno quel topic e le relative parole chiave. In questo modo, cambiando il contesto (e.g. l'ontologia viene popolata con un set diverso di articoli, magari provenienti da una serie di conferenze), si pu\'o mostrare come lo stesso argomento viene trattato in maniera diversa a seconda del contesto. Se ad esempio il topic \'e \emph{Bioinformatica}, in un contesto di proceedings di conferenze informatiche le parole chiave potrebbero essere \emph{Algoritmi}, \emph{Strutture Dati}, \emph{Complessit\'a Computazionale}, etc. Mentre lo stesso topic in un contesto di proceedings di conferenze biologhe potrebbe avere come parole chiave \emph{Ribosomi}, \emph{Proteine}, etc. 
-
-
-
-
 
 \end{document}
