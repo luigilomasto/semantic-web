@@ -1,5 +1,6 @@
 package scraper;
 
+
 public class FactoryScraper {
 	
 	private SuperScraper jdispla;
