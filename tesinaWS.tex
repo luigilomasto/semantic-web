@@ -106,10 +106,14 @@
 	title=\lstname
 }
 \begin{document}
+
 \title{Finding similar papers using ontologies}
 \author{Francesco Gaetano, Luigi Lomasto, Marco Mecchia, Andrea Sold\'a }
 \date{Gennaio 2016}
+
 \maketitle
+\tableofcontents
+\newpage
 \section{Introduzione al problema}
 Il problema di trovare lavori scientifici simili scritti in linguaggio naturale \'e un compito molto difficile dal punto di vista informatico: Tali documenti infatti non hanno una struttura fissa, e sono pieni  di elementi non facilmente confrontabili come formule, notazioni ed immagini. Inoltre, nonostante una netta predominanza dell'inglese, i documenti sono scritti in lingue diverse. Tutte queste caratteristiche, insite in lavori di ricerca di questo tipo, rendono gli approcci basati sul confronto testuale non utilizzabili. Il nostro lavoro, basato sulle meta informazioni dei documenti e sull'utilizzo di tecnologie del Semantic Web, mira a fornire un approccio alternativo ai metodi tradizionali, nonch\'e un'infrastruttura riutilizzabile anche in altri ambiti.
 
@@ -122,7 +126,7 @@ Il lavoro \'e stato suddiviso in diverse fasi.
 \subsection{Selezione del database ed estrazione delle meta-informazioni}
 \label{subsec:infoextraction}
 In questa fase preliminare del lavoro, abbiamo costruito il dataset sul quale basarci per tutto il resto del lavoro. Per prima cosa abbiamo scelto il database dal quale attingere i lavori da confrontare. La nostra scelta e' ricaduta su DBLP\cite{DBLP} in quanto punto di riferimento centrale per la sottomissione dei paper nella comunita' informatica. DBLP inoltre mette a disposizione ampi dataset di meta-informazioni sugli articoli scaricabili in formato standard xml, con relativi url alle pagine web degli articoli.
-Mediante gli url letti dal file dblp.xml, per ogni articolo abbiamo estratto dalla pagina sorgente l'abstract ed eventualmente topics e keywords (se presenti). Questo lavoro ci ha permesso di ottenere un primo dataset che, oltre alle informazioni di partenza, contiene anche gli abstract con eventuali topics o keywords. Poich\'e topics e keywords sono state estratte dalla pagina sorgente dell'articolo, \'e stato deciso di assegnare, per ogni topic una relevance pari ad 1, e per ogni keyword una relevance pari a 0.99.\newline \newline
+Mediante gli url letti dal file dblp.xml, per ogni articolo abbiamo estratto dalla pagina sorgente l'abstract ed eventualmente topics e keywords (se presenti). Questo lavoro ci ha permesso di ottenere un primo dataset che, oltre alle informazioni di partenza, contiene anche gli abstract con eventuali topics o keywords. \newline
 A partire da questa prima versione, con l'utilizzo delle API di Alchemy abbiamo, per ogni abstract, estratto le keywords con le rispettive relevance, ottenendo cos\'i il dataset finale, sostituendo all'abstract le keywords ottenute. Il dataset finale contiene per ogni articolo le seguenti informazioni:
 
 \begin{itemize}
@@ -135,6 +139,9 @@ A partire da questa prima versione, con l'utilizzo delle API di Alchemy abbiamo,
 	\item URL
 \end{itemize} 
 
+\subsection{Calcolo della correlazione}
+Per calcolare la correlazione tra gli articoli ci siamo serviti dei topic, quando presenti nelle pagine web sorgenti, e delle keyword.
+Ai topic abbiamo deciso di dare come relevance un valore numerico pari ad 1, poich\'e esprimono al meglio il contesto trattato. Alle keyword estratte dalle sorgenti si \'e scelto di dare una relevance pari a 0.99 per lo stesso motivo prima descritto. Per le keyword estratte con Alchemy abbiamo mantenuto la relevance restituita dalla chiamata. La correlazione calcolata non \'e altro che la somma tra le relevance di topic e keyword.  
 
 \subsection{Progettazione e popolamento dell'ontologia}
 \label{subsec:ontology}
@@ -159,7 +166,7 @@ Una volta popolata l'ontologia \'e stata necessaria la progettazioni di query ad
 \label{subsec:results}
 
 Una volta progettate ed eseguite le query, abbiamo studiato un modo per poter proporre i risultati in modo elegante, ma che allo stesso tempo ponesse enfasi sullo strato semantico che lega i documenti. Per fare ci\'o, abbiamo generato in maniera ricorsiva un grafo centralizzato: la radice \'e il documento di partenza, ed il solo nodo presente nel grafo. Il livello $i+1$-esimo del grafo viene generato semplicemente lanciando la query principale su tutti gli articoli del livello $i$-esimo. Il processo viene reiterato finch\'e non si arriva alla profondit\'a desiderata.
-
+\newpage
 \section{Strumenti utilizzati}
 \label{sec:tools}
 Le tecnologie utilizzate per lo sviluppo di questo progetto sono molteplici:
@@ -265,6 +272,7 @@ Nel nostro caso abbiamo usato tale libreria per generare un grafo contenete gli 
 \end{lstlisting}
 
 
+\newpage
 \section{Implementazione}
 \label{sec:implementation}
 
@@ -748,9 +756,11 @@ edges.push(JSON.parse('{"from":"' + title + '", "to": "' + actualTitle + '", "id
 
 
    
-
+\newpage
 \section{Conclusioni}
 \label{sec:conclusions}
+Nonostante i risultati siano di notevole interesse e molto utili per studiare la correlazione tra articoli scientifici, tale approccio presenta dei limiti notevoli. Tali limitazioni sono dovute in primis alla creazione del dataset di partenza. Come accennato in precedenza, effettuare uno scraping di tutto il file dblp.xml, per estrarre gli abstract dalle sorgenti, richiede un enorme dispendio di risorse umane. Qualora si riuscisse comunque ad ottenere l'intero dataset, poter visualizzare il primo layer di correlzioni di un articolo, mediante un grafo, risulta praticamente impossibile per la gran quantità di nodi e di archi. Per limitare questo vincolo si può pensare di aumentare il valore delle relevanze estratte. Il vantaggio \'e che viene ridotta la mole di dati da rappresentare, lo svantaggio \'e che si ha perdita di informazioni.\newline
+Un'ulteriore vincolo, dato sempre dal dataset, ha condizionato il modo di interrogare l'ontologia. Una parte degli articoli, circa mille, possiede gli stessi topic. Ricercare solo per topic risulta quindi di scarso interesse, poich\'e verrebbe visualizzato un grafo enorme contenente quasi mezzo dataset. Abbiamo quindi deciso di prendere,qualora l'articolo di partenza possedesse dei topic, solo gli articoli che oltre ai topic posseggono delle keyword in comune. Quest'intersezione restringe di molto il grafo permettendone di fatto la visualizzazione.  \newline \newline
 Un altro utilizzo interessante, anche se non pienamente pertinente con gli obiettivi del lavoro, \'e la possibilit\'a di prevedere query che prendano in input dei topic e restituiscano tutti gli articoli che hanno quel topic e le relative parole chiave. In questo modo, cambiando il contesto (e.g. l'ontologia viene popolata con un set diverso di articoli, magari provenienti da una serie di conferenze), si pu\'o mostrare come lo stesso argomento viene trattato in maniera diversa a seconda del contesto. Se ad esempio il topic \'e \emph{Bioinformatica}, in un contesto di proceedings di conferenze informatiche le parole chiave potrebbero essere \emph{Algoritmi}, \emph{Strutture Dati}, \emph{Complessit\'a Computazionale}, etc. Mentre lo stesso topic in un contesto di proceedings di conferenze biologhe potrebbe avere come parole chiave \emph{Ribosomi}, \emph{Proteine}, etc. 
 
 \end{document}

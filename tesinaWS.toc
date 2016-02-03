@@ -1,0 +1,30 @@
+\select@language {italian}
+\select@language {italian}
+\contentsline {section}{\numberline {1}Introduzione al problema}{2}
+\contentsline {section}{\numberline {2}Workflow}{2}
+\contentsline {subsection}{\numberline {2.1}Selezione del database ed estrazione delle meta-informazioni}{2}
+\contentsline {subsection}{\numberline {2.2}Calcolo della correlazione}{3}
+\contentsline {subsection}{\numberline {2.3}Progettazione e popolamento dell'ontologia}{3}
+\contentsline {subsection}{\numberline {2.4}Interrogazione dell'ontologia}{3}
+\contentsline {subsection}{\numberline {2.5}Presentazione dei risultati}{4}
+\contentsline {section}{\numberline {3}Strumenti utilizzati}{5}
+\contentsline {subsection}{\numberline {3.1}Jsoup}{5}
+\contentsline {subsection}{\numberline {3.2}Prot\'eg\'e}{6}
+\contentsline {subsection}{\numberline {3.3}Apache Jena}{6}
+\contentsline {subsection}{\numberline {3.4}AlchemyAPI}{6}
+\contentsline {subsection}{\numberline {3.5}Vis.js}{6}
+\contentsline {section}{\numberline {4}Implementazione}{9}
+\contentsline {subsection}{\numberline {4.1}Costruzione del dataset}{9}
+\contentsline {paragraph}{Count}{9}
+\contentsline {paragraph}{StandardScraper}{10}
+\contentsline {paragraph}{FactoryScraper}{12}
+\contentsline {subsection}{\numberline {4.2}Estrazione delle Keyword}{13}
+\contentsline {paragraph}{ScraperForKeyword}{13}
+\contentsline {paragraph}{KeywordExtractor}{16}
+\contentsline {subsection}{\numberline {4.3}Lo schema ontologico}{16}
+\contentsline {subsubsection}{\numberline {4.3.1}Conceptual Reference Model (CRM);}{17}
+\contentsline {subsubsection}{\numberline {4.3.2}Estensioni al CRM}{19}
+\contentsline {subsection}{\numberline {4.4}Popolamento dell'ontologia}{20}
+\contentsline {subsection}{\numberline {4.5}Query SPARQL}{25}
+\contentsline {subsection}{\numberline {4.6}Front-end}{30}
+\contentsline {section}{\numberline {5}Conclusioni}{36}
